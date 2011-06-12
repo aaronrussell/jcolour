@@ -7,7 +7,7 @@
   @homepage http://github.com/aaronrussell/jcolour/
   @author   Aaron Russell (http://www.aaronrussell.co.uk)
   
-  Copyright (c) 2010-2011 Aaron Russell (aaron@gc4.co.uk)
+  @license Copyright (c) 2010-2011 Aaron Russell (aaron@gc4.co.uk)
   Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
   and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
   */  var hexify, hsl_to_rgb, hue_to_rgb, min_max, rgb_to_hsl;
@@ -260,7 +260,7 @@
     return jColour;
   })();
   /*
-  The following methods are private helper methods
+  @private
   */
   rgb_to_hsl = function(c) {
     var b, d, g, h, l, max, min, r, s, _ref;
@@ -298,6 +298,9 @@
     c.lightness = l * 100;
     return c;
   };
+  /*
+  @private
+  */
   hsl_to_rgb = function(c) {
     var b, g, h, l, p, q, r, s;
     if (c.hue > 360) {
@@ -326,6 +329,9 @@
     c.blue = b * 255;
     return c;
   };
+  /*
+  @private
+  */
   hue_to_rgb = function(p, q, t) {
     if (t < 0) {
       t += 1;
@@ -344,6 +350,9 @@
     }
     return p;
   };
+  /*
+  @private
+  */
   hexify = function(n) {
     if (n == null) {
       n = '00';
@@ -357,6 +366,9 @@
     n = Math.round(n);
     return "0123456789ABCDEF".charAt((n - n % 16) / 16) + "0123456789ABCDEF".charAt(n % 16);
   };
+  /*
+  @private
+  */
   min_max = function(i, min, max) {
     return Math.min(Math.max(i, min), max);
   };
