@@ -268,9 +268,36 @@ class window.jColour
     alpha =   (colour.alpha * p)  + (this.alpha * (1-p))
     
     new jColour "rgba(#{Math.round rgb.red}, #{Math.round rgb.green}, #{Math.round rgb.blue})"
-    
   
-    
+  
+  ###
+  Adjust colour
+  ###
+  adjust_colour: (params = {}) ->
+    kind = throw_if_incompatible params
+    for key of params
+      @[key] += params[key]
+    if kind[0] then rgb_to_hsl this else hsl_to_rgb this
+  
+  
+  ###
+  Scale colour
+  ###
+  scale_colour: (params = {}) ->
+    kind = throw_if_incompatible params
+    for key of params
+      @[key] += (@[key] / 100) * params[key]
+    if kind[0] then rgb_to_hsl this else hsl_to_rgb this
+  
+  
+  ###
+  Change colour
+  ###
+  change_colour: (params = {}) ->
+    kind = throw_if_incompatible params
+    for key of params
+      @[key] = params[key]
+    if kind[0] then rgb_to_hsl this else hsl_to_rgb this
 
 
 ###
@@ -358,4 +385,17 @@ hexify = (n = '00') ->
 ###
 min_max = (i, min, max) ->
   Math.min Math.max(i, min), max
+
+
+###
+@private
+###
+throw_if_incompatible = (params) ->
+  rgb = hsl = false
+  for key of params
+    rgb = true if key in ['red', 'green', 'blue']
+    hsl = true if key in ['hue', 'saturation', 'luminosity']
+  if rgb and hsl
+    throw 'Cannot change both RGB and HSL properties'
+  [rgb, hsl]
 

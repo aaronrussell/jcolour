@@ -10,7 +10,7 @@
   @license Copyright (c) 2010-2011 Aaron Russell (aaron@gc4.co.uk)
   Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
   and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
-  */  var hexify, hsl_to_rgb, hue_to_rgb, min_max, rgb_to_hsl;
+  */  var hexify, hsl_to_rgb, hue_to_rgb, min_max, rgb_to_hsl, throw_if_incompatible;
   window.jColour = (function() {
     /*
       Creates a new jColour object
@@ -257,6 +257,60 @@
       alpha = (colour.alpha * p) + (this.alpha * (1 - p));
       return new jColour("rgba(" + (Math.round(rgb.red)) + ", " + (Math.round(rgb.green)) + ", " + (Math.round(rgb.blue)) + ")");
     };
+    /*
+      Adjust colour
+      */
+    jColour.prototype.adjust_colour = function(params) {
+      var key, kind;
+      if (params == null) {
+        params = {};
+      }
+      kind = throw_if_incompatible(params);
+      for (key in params) {
+        this[key] += params[key];
+      }
+      if (kind[0]) {
+        return rgb_to_hsl(this);
+      } else {
+        return hsl_to_rgb(this);
+      }
+    };
+    /*
+      Scale colour
+      */
+    jColour.prototype.scale_colour = function(params) {
+      var key, kind;
+      if (params == null) {
+        params = {};
+      }
+      kind = throw_if_incompatible(params);
+      for (key in params) {
+        this[key] += (this[key] / 100) * params[key];
+      }
+      if (kind[0]) {
+        return rgb_to_hsl(this);
+      } else {
+        return hsl_to_rgb(this);
+      }
+    };
+    /*
+      Change colour
+      */
+    jColour.prototype.change_colour = function(params) {
+      var key, kind;
+      if (params == null) {
+        params = {};
+      }
+      kind = throw_if_incompatible(params);
+      for (key in params) {
+        this[key] = params[key];
+      }
+      if (kind[0]) {
+        return rgb_to_hsl(this);
+      } else {
+        return hsl_to_rgb(this);
+      }
+    };
     return jColour;
   })();
   /*
@@ -371,5 +425,24 @@
   */
   min_max = function(i, min, max) {
     return Math.min(Math.max(i, min), max);
+  };
+  /*
+  @private
+  */
+  throw_if_incompatible = function(params) {
+    var hsl, key, rgb;
+    rgb = hsl = false;
+    for (key in params) {
+      if (key === 'red' || key === 'green' || key === 'blue') {
+        rgb = true;
+      }
+      if (key === 'hue' || key === 'saturation' || key === 'luminosity') {
+        hsl = true;
+      }
+    }
+    if (rgb && hsl) {
+      throw 'Cannot change both RGB and HSL properties';
+    }
+    return [rgb, hsl];
   };
 }).call(this);
