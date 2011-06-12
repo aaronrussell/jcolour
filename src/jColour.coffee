@@ -6,7 +6,7 @@ A JavaScript colour manipulation library, inspired by the SASS/Compass colour fu
 @homepage http://github.com/aaronrussell/jcolour/
 @author   Aaron Russell (http://www.aaronrussell.co.uk)
 
-Copyright (c) 2010-2011 Aaron Russell (aaron@gc4.co.uk)
+@license Copyright (c) 2010-2011 Aaron Russell (aaron@gc4.co.uk)
 Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
 and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
 ###
@@ -274,7 +274,7 @@ class window.jColour
 
 
 ###
-The following methods are private helper methods
+@private
 ###
 rgb_to_hsl = (c) ->
   c.red   = min_max c.red, 0, 255
@@ -302,6 +302,10 @@ rgb_to_hsl = (c) ->
   c.lightness   = l * 100
   c
 
+
+###
+@private
+###
 hsl_to_rgb = (c) ->
   c.hue -= Math.floor(c.hue/360)*360 if c.hue > 360
   c.hue -= Math.ceil(c.hue/360)*360  if c.hue < 0
@@ -324,6 +328,10 @@ hsl_to_rgb = (c) ->
   c.blue  = b * 255
   c
 
+
+###
+@private
+###
 hue_to_rgb = (p, q, t) ->
   t += 1 if t < 0
   t -= 1 if t > 1
@@ -332,6 +340,10 @@ hue_to_rgb = (p, q, t) ->
   return p + (q - p) * (2/3 - t) * 6 if t < 2/3
   return p
 
+
+###
+@private
+###
 hexify = (n = '00') ->
   n = parseInt n
   return '00' if n == 0 or isNaN n
@@ -340,6 +352,10 @@ hexify = (n = '00') ->
   n = Math.round n
   "0123456789ABCDEF".charAt((n-n%16)/16) + "0123456789ABCDEF".charAt(n%16)
 
+
+###
+@private
+###
 min_max = (i, min, max) ->
   Math.min Math.max(i, min), max
 
