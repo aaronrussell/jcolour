@@ -19,7 +19,7 @@ c = new jColour('hsla(0,100,100,1)');
 
 <p>Internally, colours are represented in both RGBA and HSLA. Any colour adjustments result in
 both representaions being recalculated. The alpha channel of a colour is stored independent
-it's RGB or HSL representation. If no alpha value is supplied, it defaults to 1.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">constructor: </span><span class="nf">(col) -&gt;</span>
+it's RGB or HSL representation. If no alpha value is supplied, it defaults to 1.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">constructor: </span><span class="nf">(col = &#39;#ffffff&#39;) -&gt;</span>
     
     <span class="k">if</span> <span class="nv">hex = </span><span class="nx">col</span><span class="p">.</span><span class="nx">match</span> <span class="sr">/^#?([a-f0-9]{6,8})$/i</span>
       <span class="vi">@red    = </span><span class="nb">parseInt</span> <span class="nx">hex</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">substring</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="mi">16</span>
@@ -28,17 +28,19 @@ it's RGB or HSL representation. If no alpha value is supplied, it defaults to 1.
       <span class="vi">@alpha  = </span><span class="k">if</span> <span class="nx">hex</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">substring</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span> <span class="k">then</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">hex</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">substring</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">8</span><span class="p">),</span> <span class="mi">16</span><span class="p">)</span> <span class="o">/</span> <span class="mi">255</span> <span class="k">else</span> <span class="mi">1</span>
       <span class="nx">rgbToHsl</span> <span class="k">this</span>
     <span class="k">else</span> <span class="k">if</span> <span class="nv">rgb = </span><span class="nx">col</span><span class="p">.</span><span class="nx">match</span> <span class="sr">/^rgba?\(\s*(\d+)[,\s]*(\d+)[,\s]*(\d+)[,\s]*([\.\d]+)?\s*\)$/i</span>
-      <span class="vi">@red    = </span><span class="nx">rgb</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-      <span class="vi">@green  = </span><span class="nx">rgb</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-      <span class="vi">@blue   = </span><span class="nx">rgb</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+      <span class="vi">@red    = </span><span class="nb">parseInt</span> <span class="nx">rgb</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+      <span class="vi">@green  = </span><span class="nb">parseInt</span> <span class="nx">rgb</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+      <span class="vi">@blue   = </span><span class="nb">parseInt</span> <span class="nx">rgb</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
       <span class="vi">@alpha  = </span><span class="k">if</span> <span class="nx">rgb</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="k">then</span> <span class="nx">rgb</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="k">else</span> <span class="mi">1</span>
       <span class="nx">rgbToHsl</span> <span class="k">this</span>
     <span class="k">else</span> <span class="k">if</span> <span class="nv">hsl = </span><span class="nx">col</span><span class="p">.</span><span class="nx">match</span> <span class="sr">/^hsla?\(\s*(\d+)[,\s]*(\d+)[,\s]*(\d+)[,\s]*([\.\d]+)?\s*\)$/i</span>
-      <span class="vi">@hue        = </span><span class="nx">hsl</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-      <span class="vi">@saturation = </span><span class="nx">hsl</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-      <span class="vi">@lightness  = </span><span class="nx">hsl</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+      <span class="vi">@hue        = </span><span class="nb">parseInt</span> <span class="nx">hsl</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+      <span class="vi">@saturation = </span><span class="nb">parseInt</span> <span class="nx">hsl</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+      <span class="vi">@lightness  = </span><span class="nb">parseInt</span> <span class="nx">hsl</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
       <span class="vi">@alpha      = </span><span class="k">if</span> <span class="nx">hsl</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="k">then</span> <span class="nx">hsl</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="k">else</span> <span class="mi">1</span>
       <span class="nx">hslToRgb</span> <span class="k">this</span>
+    <span class="k">else</span>
+      <span class="k">throw</span> <span class="s1">&#39;Invalid colour string.&#39;</span>
   
   </pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <h3>Accessing colour representations</h3>             </td>             <td class="code">               <div class="highlight"><pre>  </pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <p>At any time, a jColour object can return a string of any of it's colour represenations.</p>             </td>             <td class="code">               <div class="highlight"><pre>  </pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <h4><code>hex(show_alpha = false)</code></h4>
 
@@ -48,10 +50,11 @@ hexdecimal representation of the alpha channel, in which case pass <code>true</c
 
 <pre><code>c.hex();  # -&gt; '#ff0000'
 </code></pre>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">hex: </span><span class="nf">(showAlpha = false) -&gt;</span>
-    <span class="k">if</span> <span class="nx">showAlpha</span> <span class="o">&amp;&amp;</span> <span class="nx">@alpha</span> <span class="o">&lt;</span> <span class="mi">1</span>
+    <span class="nv">hex = </span><span class="k">if</span> <span class="nx">showAlpha</span> <span class="o">&amp;&amp;</span> <span class="nx">@alpha</span> <span class="o">&lt;</span> <span class="mi">1</span>
       <span class="s2">&quot;##{hexify @red}#{hexify @green}#{hexify @blue}#{hexify @alpha * 255}&quot;</span>
     <span class="k">else</span>
       <span class="s2">&quot;##{hexify @red}#{hexify @green}#{hexify @blue}&quot;</span>
+    <span class="nx">hex</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()</span>
   
   </pre></div>             </td>           </tr>                               <tr id="section-7">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-7">&#182;</a>               </div>               <h4><code>rgb()</code></h4>
 
@@ -63,7 +66,7 @@ the returned representation will be RGBA.</p>
     <span class="k">if</span> <span class="nx">@alpha</span> <span class="o">==</span> <span class="mi">1</span>
       <span class="k">return</span> <span class="s2">&quot;rgb(#{Math.round @red}, #{Math.round @green}, #{Math.round @blue})&quot;</span>
     <span class="k">else</span>
-      <span class="k">return</span> <span class="s2">&quot;rgba(#{Math.round @red}, #{Math.round @green}, #{Math.round @blue}, #{@alpha.toPrecision 2})&quot;</span>
+      <span class="k">return</span> <span class="s2">&quot;rgba(#{Math.round @red}, #{Math.round @green}, #{Math.round @blue}, #{Math.round(@alpha * 100) / 100})&quot;</span>
   
   </pre></div>             </td>           </tr>                               <tr id="section-8">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-8">&#182;</a>               </div>               <h4><code>hsl()</code></h4>
 
@@ -75,7 +78,7 @@ the returned representation will be HSLA.</p>
     <span class="k">if</span> <span class="nx">@alpha</span> <span class="o">==</span> <span class="mi">1</span>
       <span class="k">return</span> <span class="s2">&quot;hsl(#{Math.round @hue}, #{Math.round @saturation}, #{Math.round @lightness})&quot;</span>
     <span class="k">else</span>
-      <span class="k">return</span> <span class="s2">&quot;hsla(#{Math.round @hue}, #{Math.round @saturation}, #{Math.round @lightness}, #{@alpha.toPrecision 2})&quot;</span>
+      <span class="k">return</span> <span class="s2">&quot;hsla(#{Math.round @hue}, #{Math.round @saturation}, #{Math.round @lightness}, #{Math.round(@alpha * 100) / 100})&quot;</span>
   
   </pre></div>             </td>           </tr>                               <tr id="section-9">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-9">&#182;</a>               </div>               <h3>Manipulating colours</h3>             </td>             <td class="code">               <div class="highlight"><pre>  </pre></div>             </td>           </tr>                               <tr id="section-10">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-10">&#182;</a>               </div>               <p>A jColour object can be manipulated using a range of colour manipulation methods. Each method
 makes the required adjustment to the colour representations and updates the jColour object.
@@ -167,7 +170,16 @@ adjustment (decrease) to the current saturation.</p>
     <span class="nx">@saturation</span> <span class="o">-=</span> <span class="p">(</span><span class="nx">@saturation</span> <span class="err">/ 100) * percent</span>
     <span class="nx">hslToRgb</span> <span class="k">this</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-19">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-19">&#182;</a>               </div>               <h4><code>adjustHue(degrees)</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-19">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-19">&#182;</a>               </div>               <h4><code>grayscale()</code></h4>
+
+<p>Converts the color to grayscale. This is identical to <code>desaturate(100)</code>.</p>
+
+<pre><code>c.grayscale();
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">grayscale: </span><span class="o">-&gt;</span>
+    <span class="vi">@saturation = </span><span class="mi">0</span>
+    <span class="nx">hslToRgb</span> <span class="k">this</span>
+  
+  </pre></div>             </td>           </tr>                               <tr id="section-20">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-20">&#182;</a>               </div>               <h4><code>adjustHue(degrees)</code></h4>
 
 <p>Changes the hue of the colour whilst retaining the lightness and saturation. This method should
 be passed a number of degrees (usually between -360 and 360) and makes a relative adjustment to
@@ -178,38 +190,7 @@ the current hue.</p>
     <span class="nx">@hue</span> <span class="o">+=</span> <span class="nx">degrees</span>
     <span class="nx">hslToRgb</span> <span class="k">this</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-20">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-20">&#182;</a>               </div>               <h4><code>opacify(amount)</code></h4>
-
-<p>Makes the colour more opaque. Takes an amount between 0 and 100 which makes a relative
-adjustment (increase) to the current alpha channel.</p>
-
-<pre><code>c.opacify(25);
-</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">opacify: </span><span class="nf">(amount) -&gt;</span>
-    <span class="nx">@alpha</span> <span class="o">+=</span> <span class="nx">amount</span>
-    <span class="vi">@alpha = </span><span class="nx">minMax</span> <span class="nx">@alpha</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span>
-    <span class="k">this</span>
-  
-  </pre></div>             </td>           </tr>                               <tr id="section-21">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-21">&#182;</a>               </div>               <h4><code>transparentize(25)</code></h4>
-
-<p>Makes the colour more transparent. Takes an amount between 0 and 100 which makes a relative
-adjustment (decrease) to the current alpha channel.</p>
-
-<pre><code>c.transparentize(25);
-</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">transparentize: </span><span class="nf">(amount) -&gt;</span>
-    <span class="nx">@alpha</span> <span class="o">-=</span> <span class="nx">amount</span>
-    <span class="vi">@alpha = </span><span class="nx">minMax</span> <span class="nx">@alpha</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span>
-    <span class="k">this</span>
-  
-  </pre></div>             </td>           </tr>                               <tr id="section-22">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-22">&#182;</a>               </div>               <h4><code>grayscale()</code></h4>
-
-<p>Converts the color to grayscale. This is identical to <code>desaturate(100)</code>.</p>
-
-<pre><code>c.grayscale();
-</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">grayscale: </span><span class="o">-&gt;</span>
-    <span class="vi">@saturation = </span><span class="mi">0</span>
-    <span class="nx">hslToRgb</span> <span class="k">this</span>
-  
-  </pre></div>             </td>           </tr>                               <tr id="section-23">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-23">&#182;</a>               </div>               <h4><code>complement()</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-21">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-21">&#182;</a>               </div>               <h4><code>complement()</code></h4>
 
 <p>Returns the complement of the current colour. This is identical to <code>adjustHue(180)</code>.</p>
 
@@ -217,6 +198,28 @@ adjustment (decrease) to the current alpha channel.</p>
 </code></pre>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">complement: </span><span class="o">-&gt;</span>
     <span class="nx">@hue</span> <span class="o">+=</span> <span class="mi">180</span>
     <span class="nx">hslToRgb</span> <span class="k">this</span>
+  
+  </pre></div>             </td>           </tr>                               <tr id="section-22">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-22">&#182;</a>               </div>               <h4><code>opacify(amount)</code></h4>
+
+<p>Makes the colour more opaque. Takes an amount between 0 and 1 which makes a relative
+adjustment (increase) to the current alpha channel.</p>
+
+<pre><code>c.opacify(0.25);
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">opacify: </span><span class="nf">(amount) -&gt;</span>
+    <span class="nx">@alpha</span> <span class="o">+=</span> <span class="nx">amount</span>
+    <span class="vi">@alpha = </span><span class="nx">minMax</span> <span class="nx">@alpha</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span>
+    <span class="k">this</span>
+  
+  </pre></div>             </td>           </tr>                               <tr id="section-23">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-23">&#182;</a>               </div>               <h4><code>transparentize(amount)</code></h4>
+
+<p>Makes the colour more transparent. Takes an amount between 0 and 100 which makes a relative
+adjustment (decrease) to the current alpha channel.</p>
+
+<pre><code>c.transparentize(0.25);
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">transparentize: </span><span class="nf">(amount) -&gt;</span>
+    <span class="nx">@alpha</span> <span class="o">-=</span> <span class="nx">amount</span>
+    <span class="vi">@alpha = </span><span class="nx">minMax</span> <span class="nx">@alpha</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span>
+    <span class="k">this</span>
   
   </pre></div>             </td>           </tr>                               <tr id="section-24">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-24">&#182;</a>               </div>               <h4><code>invert()</code></h4>
 
@@ -236,25 +239,27 @@ properties of red, green, blue, hue, saturation, lightness and alpha. All proper
 optional and you can't specify both RGB and HSL properties at the same time.</p>
 
 <p>Red, green and blue propeties should have a value between -255 and 255. The hue property should
-have a value between -360 and 360. The saturation, lightness and opacity values should have a
-value between -100 and 100. All values will make a relative adjustment to their current value.</p>
+have a value between -360 and 360. The saturation and lightness properties should have a value
+between -100 and 100. The alpha property should have a value between 0 and 1. All values will
+make a relative adjustment to their current value.</p>
 
 <pre><code>c.adjustColour({
   red:        25,
   green:      -30,
-  alpha:      -25
+  alpha:      -0.25
 })
 c.adjustColour({
   hue:        120,
   lightness:  25,
   saturation: -10
 })
-</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">adjustColour: </span><span class="nf">(params = {}) -&gt;</span></pre></div>             </td>           </tr>                               <tr id="section-26">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-26">&#182;</a>               </div>               <p>TODO filter params</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nv">kind = </span><span class="nx">throwIfIncompatible</span> <span class="nx">params</span>
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">adjustColour: </span><span class="nf">(params = {}) -&gt;</span>
+    <span class="nv">kind = </span><span class="nx">throwIfIncompatible</span> <span class="nx">params</span>
     <span class="k">for</span> <span class="nx">key</span> <span class="k">of</span> <span class="nx">params</span>
-      <span class="err">@</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">+=</span> <span class="nx">params</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span>
+      <span class="err">@</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">+=</span> <span class="nx">params</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="k">if</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">properties</span>
     <span class="k">if</span> <span class="nx">kind</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">then</span> <span class="nx">rgbToHsl</span> <span class="k">this</span> <span class="k">else</span> <span class="nx">hslToRgb</span> <span class="k">this</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-27">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-27">&#182;</a>               </div>               <h4><code>scaleColour(params = {})</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-26">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-26">&#182;</a>               </div>               <h4><code>scaleColour(params = {})</code></h4>
 
 <p>Makes a scaled adjustment to one or more properties of the colour. Takes an object with the
 properties of red, green, blue, saturation, lightness and alpha. Note that you can't scale the
@@ -272,20 +277,21 @@ c.scaleColour({
   lightness:  25,
   saturation: -10
 })
-</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">scaleColour: </span><span class="nf">(params = {}) -&gt;</span></pre></div>             </td>           </tr>                               <tr id="section-28">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-28">&#182;</a>               </div>               <p>TODO filter params</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nv">kind = </span><span class="nx">throwIfIncompatible</span> <span class="nx">params</span>
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">scaleColour: </span><span class="nf">(params = {}) -&gt;</span></pre></div>             </td>           </tr>                               <tr id="section-27">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-27">&#182;</a>               </div>               <p>TODO filter params</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nv">kind = </span><span class="nx">throwIfIncompatible</span> <span class="nx">params</span>
     <span class="k">for</span> <span class="nx">key</span> <span class="k">of</span> <span class="nx">params</span>
-      <span class="err">@</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="err">@</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span> <span class="o">*</span> <span class="nx">params</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span>
+      <span class="err">@</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="err">@</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span> <span class="o">*</span> <span class="nx">params</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="k">if</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">properties</span> <span class="o">and</span> <span class="nx">key</span> <span class="o">isnt</span> <span class="s1">&#39;hue&#39;</span>
     <span class="k">if</span> <span class="nx">kind</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">then</span> <span class="nx">rgbToHsl</span> <span class="k">this</span> <span class="k">else</span> <span class="nx">hslToRgb</span> <span class="k">this</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-29">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-29">&#182;</a>               </div>               <h4><code>changeColour(params = {})</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-28">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-28">&#182;</a>               </div>               <h4><code>changeColour(params = {})</code></h4>
 
 <p>Changes one or more properties of the colour to the absolute value provided. Takes an object
 with the properties of red, green, blue, hue, saturation, lightness and alpha. All properties
 are optional and you can't specify both RGB and HSL properties at the same time.</p>
 
 <p>Red, green and blue propeties should have a value between 0 and 255. The hue property should
-have a value between 0 and 360. The saturation, lightness and opacity values should have a
-value between 0 and 100. All properties will be set to the new value.</p>
+have a value between 0 and 360. The saturation and lightness properties should have a value
+between 0 and 100. The alpha property should have a value between 0 and 1. All properties will
+be set to the new value.</p>
 
 <pre><code>c.changeColour({
   red:        255,
@@ -297,12 +303,12 @@ c.changeColour({
   lightness:  100,
   saturation: 100
 })
-</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">changeColour: </span><span class="nf">(params = {}) -&gt;</span></pre></div>             </td>           </tr>                               <tr id="section-30">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-30">&#182;</a>               </div>               <p>TODO filter params</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nv">kind = </span><span class="nx">throwIfIncompatible</span> <span class="nx">params</span>
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">changeColour: </span><span class="nf">(params = {}) -&gt;</span></pre></div>             </td>           </tr>                               <tr id="section-29">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-29">&#182;</a>               </div>               <p>TODO filter params</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nv">kind = </span><span class="nx">throwIfIncompatible</span> <span class="nx">params</span>
     <span class="k">for</span> <span class="nx">key</span> <span class="k">of</span> <span class="nx">params</span>
       <span class="err">@</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">params</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span>
     <span class="k">if</span> <span class="nx">kind</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">then</span> <span class="nx">rgbToHsl</span> <span class="k">this</span> <span class="k">else</span> <span class="nx">hslToRgb</span> <span class="k">this</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-31">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-31">&#182;</a>               </div>               <h4><code>mixWith(colour, weight = 50)</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-30">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-30">&#182;</a>               </div>               <h4><code>mixWith(colour, weight = 50)</code></h4>
 
 <p>Mixes the colour with another 'mix' colour. The mix colour can be passed as either a jColour
 object or a string. Each of the RGB components are averaged, optionally weighted with a given
@@ -331,9 +337,11 @@ red.mixWith('#ffffff', 75).rgb();   # -&gt; 'rgb(255, 191, 191)'
     
     <span class="nx">rgbToHsl</span> <span class="k">this</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-32">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-32">&#182;</a>               </div>               <h3>Private helper methods</h3>
+  </pre></div>             </td>           </tr>                               <tr id="section-31">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-31">&#182;</a>               </div>               <h3>Private helper methods</h3>
 
-<p>The following methods are all used internally and are not accessible from outside the jColour object.</p>             </td>             <td class="code">               <div class="highlight"><pre>  </pre></div>             </td>           </tr>                               <tr id="section-33">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-33">&#182;</a>               </div>               <h4><code>rgbToHsl(c)</code></h4>
+<p>The following methods are all used internally and are not accessible from outside the jColour object.</p>             </td>             <td class="code">               <div class="highlight"><pre>  
+  <span class="nv">properties = </span><span class="p">[</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;hue&#39;</span><span class="p">,</span> <span class="s1">&#39;saturation&#39;</span><span class="p">,</span> <span class="s1">&#39;lightness&#39;</span><span class="p">,</span> <span class="s1">&#39;alpha&#39;</span><span class="p">]</span>
+  </pre></div>             </td>           </tr>                               <tr id="section-32">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-32">&#182;</a>               </div>               <h4><code>rgbToHsl(c)</code></h4>
 
 <p>Converts the RGB representation to a HSL representation.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">rgbToHsl = </span><span class="nf">(c) -&gt;</span>
     <span class="nv">c.red   = </span><span class="nx">minMax</span> <span class="nx">c</span><span class="p">.</span><span class="nx">red</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span>
@@ -345,26 +353,28 @@ red.mixWith('#ffffff', 75).rgb();   # -&gt; 'rgb(255, 191, 191)'
     <span class="nv">b = </span><span class="nx">c</span><span class="p">.</span><span class="nx">blue</span> <span class="err">/ 255</span>
     <span class="nv">max = </span><span class="nb">Math</span><span class="p">.</span><span class="nx">max</span> <span class="nx">r</span><span class="p">,</span> <span class="nx">g</span><span class="p">,</span> <span class="nx">b</span>
     <span class="nv">min = </span><span class="nb">Math</span><span class="p">.</span><span class="nx">min</span> <span class="nx">r</span><span class="p">,</span> <span class="nx">g</span><span class="p">,</span> <span class="nx">b</span>
-    <span class="nv">h = s = l = </span><span class="p">(</span><span class="nx">max</span> <span class="o">+</span> <span class="nx">min</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
-    <span class="k">if</span> <span class="nx">max</span> <span class="o">==</span> <span class="nx">min</span>
-      <span class="nv">h = s = </span><span class="mi">0</span>
+    <span class="nv">d = </span><span class="nx">max</span> <span class="o">-</span> <span class="nx">min</span>
+    <span class="nv">h = </span><span class="k">switch</span> <span class="nx">max</span>
+      <span class="k">when</span> <span class="nx">min</span> <span class="k">then</span> <span class="mi">0</span>
+      <span class="k">when</span> <span class="nx">r</span> <span class="k">then</span> <span class="mi">60</span> <span class="o">*</span> <span class="p">(</span><span class="nx">b</span> <span class="o">-</span> <span class="nx">r</span><span class="p">)</span> <span class="o">/</span> <span class="nx">d</span>
+      <span class="k">when</span> <span class="nx">g</span> <span class="k">then</span> <span class="mi">60</span> <span class="o">*</span> <span class="p">(</span><span class="nx">b</span> <span class="o">-</span> <span class="nx">r</span><span class="p">)</span> <span class="o">/</span> <span class="nx">d</span> <span class="o">+</span> <span class="mi">120</span>
+      <span class="k">when</span> <span class="nx">b</span> <span class="k">then</span> <span class="mi">60</span> <span class="o">*</span> <span class="p">(</span><span class="nx">b</span> <span class="o">-</span> <span class="nx">r</span><span class="p">)</span> <span class="o">/</span> <span class="nx">d</span> <span class="o">+</span> <span class="mi">240</span>
+    <span class="nv">l = </span><span class="p">(</span><span class="nx">max</span> <span class="o">+</span> <span class="nx">min</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+    <span class="nv">s = </span><span class="k">if</span> <span class="nx">max</span> <span class="o">==</span> <span class="nx">min</span>
+      <span class="mi">0</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="nx">l</span> <span class="o">&lt;</span> <span class="mf">0.5</span>
+      <span class="nx">d</span> <span class="err">/ (2 * l)</span>
     <span class="k">else</span>
-      <span class="nv">d = </span><span class="nx">max</span> <span class="o">-</span> <span class="nx">min</span>
-      <span class="nv">s = </span><span class="k">if</span> <span class="nx">l</span> <span class="o">&gt;</span> <span class="mf">0.5</span> <span class="k">then</span> <span class="nx">d</span> <span class="sr">/ (2 - max - min) else d /</span> <span class="p">(</span><span class="nx">max</span> <span class="o">+</span> <span class="nx">min</span><span class="p">)</span>
-      <span class="k">switch</span> <span class="nx">max</span>
-        <span class="k">when</span> <span class="nx">r</span> <span class="k">then</span> <span class="nv">h = </span><span class="p">(</span><span class="nx">g</span> <span class="o">-</span> <span class="nx">b</span><span class="p">)</span> <span class="o">/</span> <span class="nx">d</span> <span class="o">+</span> <span class="p">(</span><span class="nx">g</span> <span class="o">&lt;</span> <span class="nx">b</span> <span class="o">?</span> <span class="mi">6</span> <span class="o">:</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="k">when</span> <span class="nx">g</span> <span class="k">then</span> <span class="nv">h = </span><span class="p">(</span><span class="nx">b</span> <span class="o">-</span> <span class="nx">r</span><span class="p">)</span> <span class="o">/</span> <span class="nx">d</span> <span class="o">+</span> <span class="mi">2</span>
-        <span class="k">when</span> <span class="nx">b</span> <span class="k">then</span> <span class="nv">h = </span><span class="p">(</span><span class="nx">r</span> <span class="o">-</span> <span class="nx">g</span><span class="p">)</span> <span class="o">/</span> <span class="nx">d</span> <span class="o">+</span> <span class="mi">4</span>
-      <span class="nx">h</span> <span class="err">/= 6</span>
-    <span class="nv">c.hue         = </span><span class="nx">h</span> <span class="o">*</span> <span class="mi">360</span>
+      <span class="nx">d</span> <span class="err">/ (2 - 2 * l)</span>
+    <span class="nv">c.hue         = </span><span class="nx">h</span> <span class="o">%</span> <span class="mi">360</span>
     <span class="nv">c.saturation  = </span><span class="nx">s</span> <span class="o">*</span> <span class="mi">100</span>
     <span class="nv">c.lightness   = </span><span class="nx">l</span> <span class="o">*</span> <span class="mi">100</span>
     <span class="nx">c</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-34">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-34">&#182;</a>               </div>               <h4><code>hslToRgb(c)</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-33">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-33">&#182;</a>               </div>               <h4><code>hslToRgb(c)</code></h4>
 
 <p>Converts the HSL representation to a RGB representation.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">hslToRgb = </span><span class="nf">(c) -&gt;</span>
-    <span class="nx">c</span><span class="p">.</span><span class="nx">hue</span> <span class="o">-=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">hue</span><span class="err">/360)*360 if c.hue &gt; 360</span>
+    <span class="nx">c</span><span class="p">.</span><span class="nx">hue</span> <span class="o">-=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">hue</span><span class="err">/360)*360 if c.hue &gt;= 360</span>
     <span class="nx">c</span><span class="p">.</span><span class="nx">hue</span> <span class="o">-=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">ceil</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">hue</span><span class="err">/360)*360  if c.hue &lt; 0</span>
     <span class="nv">c.saturation  = </span><span class="nx">minMax</span> <span class="nx">c</span><span class="p">.</span><span class="nx">saturation</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span>
     <span class="nv">c.lightness   = </span><span class="nx">minMax</span> <span class="nx">c</span><span class="p">.</span><span class="nx">lightness</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span>
@@ -372,30 +382,27 @@ red.mixWith('#ffffff', 75).rgb();   # -&gt; 'rgb(255, 191, 191)'
     <span class="nv">h = </span><span class="nx">c</span><span class="p">.</span><span class="nx">hue</span> <span class="err">/ 360</span>
     <span class="nv">s = </span><span class="nx">c</span><span class="p">.</span><span class="nx">saturation</span> <span class="err">/ 100</span>
     <span class="nv">l = </span><span class="nx">c</span><span class="p">.</span><span class="nx">lightness</span> <span class="err">/ 100</span>
-    <span class="k">if</span> <span class="nx">s</span> <span class="o">==</span> <span class="mi">0</span>
-      <span class="nv">r = g = b = </span><span class="nx">l</span>
-    <span class="k">else</span>
-      <span class="nv">q = </span><span class="k">if</span> <span class="nx">l</span> <span class="o">&lt;</span> <span class="mf">0.5</span> <span class="k">then</span> <span class="nx">l</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="nx">s</span><span class="p">)</span> <span class="k">else</span> <span class="nx">l</span> <span class="o">+</span> <span class="nx">s</span> <span class="o">-</span> <span class="nx">l</span> <span class="o">*</span> <span class="nx">s</span>
-      <span class="nv">p = </span><span class="mi">2</span> <span class="o">*</span> <span class="nx">l</span> <span class="o">-</span> <span class="nx">q</span>
-      <span class="nv">r = </span><span class="nx">hueToRgb</span> <span class="nx">p</span><span class="p">,</span> <span class="nx">q</span><span class="p">,</span> <span class="nx">h</span> <span class="o">+</span> <span class="mi">1</span><span class="o">/</span><span class="mi">3</span>
-      <span class="nv">g = </span><span class="nx">hueToRgb</span> <span class="nx">p</span><span class="p">,</span> <span class="nx">q</span><span class="p">,</span> <span class="nx">h</span>
-      <span class="nv">b = </span><span class="nx">hueToRgb</span> <span class="nx">p</span><span class="p">,</span> <span class="nx">q</span><span class="p">,</span> <span class="nx">h</span> <span class="o">-</span> <span class="mi">1</span><span class="o">/</span><span class="mi">3</span>
+    <span class="nv">m2 = </span><span class="k">if</span> <span class="nx">l</span> <span class="o">&lt;</span> <span class="mf">0.5</span> <span class="k">then</span> <span class="nx">l</span> <span class="o">*</span> <span class="p">(</span><span class="nx">s</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">else</span> <span class="nx">l</span> <span class="o">+</span> <span class="nx">s</span> <span class="o">-</span> <span class="p">(</span><span class="nx">l</span> <span class="o">*</span> <span class="nx">s</span><span class="p">)</span>
+    <span class="nv">m1 = </span><span class="nx">l</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">-</span> <span class="nx">m2</span>
+    <span class="nv">r = </span><span class="nx">hueToRgb</span> <span class="nx">m1</span><span class="p">,</span> <span class="nx">m2</span><span class="p">,</span> <span class="nx">h</span> <span class="o">+</span> <span class="mi">1</span><span class="o">/</span><span class="mi">3</span>
+    <span class="nv">g = </span><span class="nx">hueToRgb</span> <span class="nx">m1</span><span class="p">,</span> <span class="nx">m2</span><span class="p">,</span> <span class="nx">h</span>
+    <span class="nv">b = </span><span class="nx">hueToRgb</span> <span class="nx">m1</span><span class="p">,</span> <span class="nx">m2</span><span class="p">,</span> <span class="nx">h</span> <span class="o">-</span> <span class="mi">1</span><span class="o">/</span><span class="mi">3</span>
     <span class="nv">c.red   = </span><span class="nx">r</span> <span class="o">*</span> <span class="mi">255</span>
     <span class="nv">c.green = </span><span class="nx">g</span> <span class="o">*</span> <span class="mi">255</span>
     <span class="nv">c.blue  = </span><span class="nx">b</span> <span class="o">*</span> <span class="mi">255</span>
     <span class="nx">c</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-35">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-35">&#182;</a>               </div>               <h4><code>hueToRgb(p, q, t)</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-34">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-34">&#182;</a>               </div>               <h4><code>hueToRgb(p, q, t)</code></h4>
 
-<p>Algorithm for converting hue to each of the red, green and blue properties.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">hueToRgb = </span><span class="nf">(p, q, t) -&gt;</span>
-    <span class="nx">t</span> <span class="o">+=</span> <span class="mi">1</span> <span class="k">if</span> <span class="nx">t</span> <span class="o">&lt;</span> <span class="mi">0</span>
-    <span class="nx">t</span> <span class="o">-=</span> <span class="mi">1</span> <span class="k">if</span> <span class="nx">t</span> <span class="o">&gt;</span> <span class="mi">1</span>
-    <span class="k">return</span> <span class="nx">p</span> <span class="o">+</span> <span class="p">(</span><span class="nx">q</span> <span class="o">-</span> <span class="nx">p</span><span class="p">)</span> <span class="o">*</span> <span class="mi">6</span> <span class="o">*</span> <span class="nx">t</span> <span class="k">if</span> <span class="nx">t</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="o">/</span><span class="mi">6</span>
-    <span class="k">return</span> <span class="nx">q</span> <span class="k">if</span> <span class="nx">t</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span>
-    <span class="k">return</span> <span class="nx">p</span> <span class="o">+</span> <span class="p">(</span><span class="nx">q</span> <span class="o">-</span> <span class="nx">p</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span> <span class="o">-</span> <span class="nx">t</span><span class="p">)</span> <span class="o">*</span> <span class="mi">6</span> <span class="k">if</span> <span class="nx">t</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="o">/</span><span class="mi">3</span>
-    <span class="nx">p</span>
+<p>Algorithm for converting hue to each of the red, green and blue properties.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">hueToRgb = </span><span class="nf">(m1, m2, h) -&gt;</span>
+    <span class="nx">h</span> <span class="o">+=</span> <span class="mi">1</span> <span class="k">if</span> <span class="nx">h</span> <span class="o">&lt;</span> <span class="mi">0</span>
+    <span class="nx">h</span> <span class="o">-=</span> <span class="mi">1</span> <span class="k">if</span> <span class="nx">h</span> <span class="o">&gt;</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="nx">m1</span> <span class="o">+</span> <span class="p">(</span><span class="nx">m2</span> <span class="o">-</span> <span class="nx">m1</span><span class="p">)</span> <span class="o">*</span> <span class="nx">h</span> <span class="o">*</span> <span class="mi">6</span> <span class="k">if</span> <span class="nx">h</span> <span class="o">*</span> <span class="mi">6</span> <span class="o">&lt;</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="nx">m2</span> <span class="k">if</span> <span class="nx">h</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">&lt;</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="nx">m1</span> <span class="o">+</span> <span class="p">(</span><span class="nx">m2</span> <span class="o">-</span> <span class="nx">m1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span> <span class="o">-</span> <span class="nx">h</span><span class="p">)</span> <span class="o">*</span> <span class="mi">6</span> <span class="k">if</span> <span class="nx">h</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">&lt;</span> <span class="mi">2</span>
+    <span class="nx">m1</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-36">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-36">&#182;</a>               </div>               <h4><code>hexify(n = '00')</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-35">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-35">&#182;</a>               </div>               <h4><code>hexify(n = '00')</code></h4>
 
 <p>Algorithm for converting each of the RGB colour channels to it's hex value.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">hexify = </span><span class="nf">(n = &#39;00&#39;) -&gt;</span>
     <span class="nv">n = </span><span class="nb">parseInt</span> <span class="nx">n</span>
@@ -403,12 +410,12 @@ red.mixWith('#ffffff', 75).rgb();   # -&gt; 'rgb(255, 191, 191)'
     <span class="nv">n = </span><span class="nb">Math</span><span class="p">.</span><span class="nx">round</span> <span class="nx">minMax</span><span class="p">(</span><span class="nx">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
     <span class="s2">&quot;0123456789ABCDEF&quot;</span><span class="p">.</span><span class="nx">charAt</span><span class="p">((</span><span class="nx">n</span><span class="o">-</span><span class="nx">n</span><span class="o">%</span><span class="mi">16</span><span class="p">)</span><span class="o">/</span><span class="mi">16</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;0123456789ABCDEF&quot;</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="nx">n</span><span class="o">%</span><span class="mi">16</span><span class="p">)</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-37">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-37">&#182;</a>               </div>               <h4><code>minMax(i, min, max)</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-36">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-36">&#182;</a>               </div>               <h4><code>minMax(i, min, max)</code></h4>
 
 <p>Helper method to clip a provided number between a minimum and maximum value.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">minMax = </span><span class="nf">(i, min, max) -&gt;</span>
     <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">min</span><span class="p">),</span> <span class="nx">max</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-38">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-38">&#182;</a>               </div>               <h4><code>throwIfIncompatible(params)</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-37">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-37">&#182;</a>               </div>               <h4><code>throwIfIncompatible(params)</code></h4>
 
 <p>Throws an error if incompatible colour properties are provided.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">throwIfIncompatible = </span><span class="nf">(params) -&gt;</span>
     <span class="nv">rgb = hsl = </span><span class="kc">false</span>
@@ -416,8 +423,8 @@ red.mixWith('#ffffff', 75).rgb();   # -&gt; 'rgb(255, 191, 191)'
       <span class="nv">rgb = </span><span class="kc">true</span> <span class="k">if</span> <span class="nx">key</span> <span class="k">in</span> <span class="p">[</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">]</span>
       <span class="nv">hsl = </span><span class="kc">true</span> <span class="k">if</span> <span class="nx">key</span> <span class="k">in</span> <span class="p">[</span><span class="s1">&#39;hue&#39;</span><span class="p">,</span> <span class="s1">&#39;saturation&#39;</span><span class="p">,</span> <span class="s1">&#39;luminosity&#39;</span><span class="p">]</span>
     <span class="k">if</span> <span class="nx">rgb</span> <span class="o">and</span> <span class="nx">hsl</span>
-      <span class="k">throw</span> <span class="s1">&#39;Cannot change both RGB and HSL properties&#39;</span>
-    <span class="p">[</span><span class="nx">rgb</span><span class="p">,</span> <span class="nx">hsl</span><span class="p">]</span></pre></div>             </td>           </tr>                               <tr id="section-39">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-39">&#182;</a>               </div>               <h3>Copyright</h3>
+      <span class="k">throw</span> <span class="s1">&#39;Cannot change both RGB and HSL properties.&#39;</span>
+    <span class="p">[</span><span class="nx">rgb</span><span class="p">,</span> <span class="nx">hsl</span><span class="p">]</span></pre></div>             </td>           </tr>                               <tr id="section-38">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-38">&#182;</a>               </div>               <h3>Copyright</h3>
 
 <p>Copyright (c) 2010-2011 <a href="http://aaronrussell.co.uk">Aaron Russell</a>.
 Licensed under the <a href="http://www.opensource.org/licenses/mit-license.php">MIT license</a>.</p>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 

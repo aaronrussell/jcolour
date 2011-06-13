@@ -25,7 +25,7 @@ class window.jColour
   # both representaions being recalculated. The alpha channel of a colour is stored independent
   # it's RGB or HSL representation. If no alpha value is supplied, it defaults to 1.
   #
-  constructor: (col) ->
+  constructor: (col = '#ffffff') ->
     
     if hex = col.match /^#?([a-f0-9]{6,8})$/i
       @red    = parseInt hex[1].substring(0,2), 16
@@ -34,17 +34,19 @@ class window.jColour
       @alpha  = if hex[1].substring(6,8) then parseInt(hex[1].substring(6,8), 16) / 255 else 1
       rgbToHsl this
     else if rgb = col.match /^rgba?\(\s*(\d+)[,\s]*(\d+)[,\s]*(\d+)[,\s]*([\.\d]+)?\s*\)$/i
-      @red    = rgb[1]
-      @green  = rgb[2]
-      @blue   = rgb[3]
+      @red    = parseInt rgb[1]
+      @green  = parseInt rgb[2]
+      @blue   = parseInt rgb[3]
       @alpha  = if rgb[4] then rgb[4] else 1
       rgbToHsl this
     else if hsl = col.match /^hsla?\(\s*(\d+)[,\s]*(\d+)[,\s]*(\d+)[,\s]*([\.\d]+)?\s*\)$/i
-      @hue        = hsl[1]
-      @saturation = hsl[2]
-      @lightness  = hsl[3]
+      @hue        = parseInt hsl[1]
+      @saturation = parseInt hsl[2]
+      @lightness  = parseInt hsl[3]
       @alpha      = if hsl[4] then hsl[4] else 1
       hslToRgb this
+    else
+      throw 'Invalid colour string.'
   
   
   #### Accessing colour representations
@@ -60,10 +62,11 @@ class window.jColour
   #     c.hex();  # -> '#ff0000'
   #
   hex: (showAlpha = false) ->
-    if showAlpha && @alpha < 1
+    hex = if showAlpha && @alpha < 1
       "##{hexify @red}#{hexify @green}#{hexify @blue}#{hexify @alpha * 255}"
     else
       "##{hexify @red}#{hexify @green}#{hexify @blue}"
+    hex.toLowerCase()
   
   
   ##### `rgb()`
@@ -77,7 +80,7 @@ class window.jColour
     if @alpha == 1
       return "rgb(#{Math.round @red}, #{Math.round @green}, #{Math.round @blue})"
     else
-      return "rgba(#{Math.round @red}, #{Math.round @green}, #{Math.round @blue}, #{@alpha.toPrecision 2})"
+      return "rgba(#{Math.round @red}, #{Math.round @green}, #{Math.round @blue}, #{Math.round(@alpha * 100) / 100})"
   
   
   ##### `hsl()`
@@ -91,7 +94,7 @@ class window.jColour
     if @alpha == 1
       return "hsl(#{Math.round @hue}, #{Math.round @saturation}, #{Math.round @lightness})"
     else
-      return "hsla(#{Math.round @hue}, #{Math.round @saturation}, #{Math.round @lightness}, #{@alpha.toPrecision 2})"
+      return "hsla(#{Math.round @hue}, #{Math.round @saturation}, #{Math.round @lightness}, #{Math.round(@alpha * 100) / 100})"
   
   
   #### Manipulating colours
@@ -203,6 +206,17 @@ class window.jColour
     hslToRgb this
   
   
+  ##### `grayscale()`
+  #
+  # Converts the color to grayscale. This is identical to `desaturate(100)`.
+  #
+  #     c.grayscale();
+  #
+  grayscale: ->
+    @saturation = 0
+    hslToRgb this
+  
+  
   ##### `adjustHue(degrees)`
   #
   # Changes the hue of the colour whilst retaining the lightness and saturation. This method should
@@ -216,43 +230,6 @@ class window.jColour
     hslToRgb this
   
   
-  ##### `opacify(amount)`
-  #
-  # Makes the colour more opaque. Takes an amount between 0 and 100 which makes a relative
-  # adjustment (increase) to the current alpha channel.
-  #
-  #     c.opacify(25);
-  #
-  opacify: (amount) ->
-    @alpha += amount
-    @alpha = minMax @alpha, 0, 1
-    this
-  
-  
-  ##### `transparentize(25)`
-  #
-  # Makes the colour more transparent. Takes an amount between 0 and 100 which makes a relative
-  # adjustment (decrease) to the current alpha channel.
-  #
-  #     c.transparentize(25);
-  #
-  transparentize: (amount) ->
-    @alpha -= amount
-    @alpha = minMax @alpha, 0, 1
-    this
-  
-  
-  ##### `grayscale()`
-  #
-  # Converts the color to grayscale. This is identical to `desaturate(100)`.
-  #
-  #     c.grayscale();
-  #
-  grayscale: ->
-    @saturation = 0
-    hslToRgb this
-  
-  
   ##### `complement()`
   #
   # Returns the complement of the current colour. This is identical to `adjustHue(180)`.
@@ -262,6 +239,32 @@ class window.jColour
   complement: ->
     @hue += 180
     hslToRgb this
+  
+  
+  ##### `opacify(amount)`
+  #
+  # Makes the colour more opaque. Takes an amount between 0 and 1 which makes a relative
+  # adjustment (increase) to the current alpha channel.
+  #
+  #     c.opacify(0.25);
+  #
+  opacify: (amount) ->
+    @alpha += amount
+    @alpha = minMax @alpha, 0, 1
+    this
+  
+  
+  ##### `transparentize(amount)`
+  #
+  # Makes the colour more transparent. Takes an amount between 0 and 100 which makes a relative
+  # adjustment (decrease) to the current alpha channel.
+  #
+  #     c.transparentize(0.25);
+  #
+  transparentize: (amount) ->
+    @alpha -= amount
+    @alpha = minMax @alpha, 0, 1
+    this
   
   
   ##### `invert()`
@@ -284,13 +287,14 @@ class window.jColour
   # optional and you can't specify both RGB and HSL properties at the same time.
   #
   # Red, green and blue propeties should have a value between -255 and 255. The hue property should
-  # have a value between -360 and 360. The saturation, lightness and opacity values should have a
-  # value between -100 and 100. All values will make a relative adjustment to their current value.
+  # have a value between -360 and 360. The saturation and lightness properties should have a value
+  # between -100 and 100. The alpha property should have a value between 0 and 1. All values will
+  # make a relative adjustment to their current value.
   #
   #     c.adjustColour({
   #       red:        25,
   #       green:      -30,
-  #       alpha:      -25
+  #       alpha:      -0.25
   #     })
   #     c.adjustColour({
   #       hue:        120,
@@ -299,10 +303,9 @@ class window.jColour
   #     })
   #
   adjustColour: (params = {}) ->
-    # TODO filter params
     kind = throwIfIncompatible params
     for key of params
-      @[key] += params[key]
+      @[key] += params[key] if key in properties
     if kind[0] then rgbToHsl this else hslToRgb this
   
   
@@ -329,7 +332,7 @@ class window.jColour
     # TODO filter params
     kind = throwIfIncompatible params
     for key of params
-      @[key] += (@[key] / 100) * params[key]
+      @[key] += (@[key] / 100) * params[key] if key in properties and key isnt 'hue'
     if kind[0] then rgbToHsl this else hslToRgb this
   
   
@@ -340,8 +343,9 @@ class window.jColour
   # are optional and you can't specify both RGB and HSL properties at the same time.
   #
   # Red, green and blue propeties should have a value between 0 and 255. The hue property should
-  # have a value between 0 and 360. The saturation, lightness and opacity values should have a
-  # value between 0 and 100. All properties will be set to the new value.
+  # have a value between 0 and 360. The saturation and lightness properties should have a value
+  # between 0 and 100. The alpha property should have a value between 0 and 1. All properties will
+  # be set to the new value.
   #
   #     c.changeColour({
   #       red:        255,
@@ -398,6 +402,8 @@ class window.jColour
   # The following methods are all used internally and are not accessible from outside the jColour object.
   #
   
+  properties = ['red', 'green', 'blue', 'hue', 'saturation', 'lightness', 'alpha']
+  
   ##### `rgbToHsl(c)`
   #
   # Converts the RGB representation to a HSL representation.
@@ -412,18 +418,20 @@ class window.jColour
     b = c.blue / 255
     max = Math.max r, g, b
     min = Math.min r, g, b
-    h = s = l = (max + min) / 2
-    if max == min
-      h = s = 0
+    d = max - min
+    h = switch max
+      when min then 0
+      when r then 60 * (b - r) / d
+      when g then 60 * (b - r) / d + 120
+      when b then 60 * (b - r) / d + 240
+    l = (max + min) / 2
+    s = if max == min
+      0
+    else if l < 0.5
+      d / (2 * l)
     else
-      d = max - min
-      s = if l > 0.5 then d / (2 - max - min) else d / (max + min)
-      switch max
-        when r then h = (g - b) / d + (g < b ? 6 : 0)
-        when g then h = (b - r) / d + 2
-        when b then h = (r - g) / d + 4
-      h /= 6
-    c.hue         = h * 360
+      d / (2 - 2 * l)
+    c.hue         = h % 360
     c.saturation  = s * 100
     c.lightness   = l * 100
     c
@@ -434,7 +442,7 @@ class window.jColour
   # Converts the HSL representation to a RGB representation.
   #
   hslToRgb = (c) ->
-    c.hue -= Math.floor(c.hue/360)*360 if c.hue > 360
+    c.hue -= Math.floor(c.hue/360)*360 if c.hue >= 360
     c.hue -= Math.ceil(c.hue/360)*360  if c.hue < 0
     c.saturation  = minMax c.saturation, 0, 100
     c.lightness   = minMax c.lightness, 0, 100
@@ -442,14 +450,11 @@ class window.jColour
     h = c.hue / 360
     s = c.saturation / 100
     l = c.lightness / 100
-    if s == 0
-      r = g = b = l
-    else
-      q = if l < 0.5 then l * (1 + s) else l + s - l * s
-      p = 2 * l - q
-      r = hueToRgb p, q, h + 1/3
-      g = hueToRgb p, q, h
-      b = hueToRgb p, q, h - 1/3
+    m2 = if l < 0.5 then l * (s + 1) else l + s - (l * s)
+    m1 = l * 2 - m2
+    r = hueToRgb m1, m2, h + 1/3
+    g = hueToRgb m1, m2, h
+    b = hueToRgb m1, m2, h - 1/3
     c.red   = r * 255
     c.green = g * 255
     c.blue  = b * 255
@@ -460,13 +465,13 @@ class window.jColour
   #
   # Algorithm for converting hue to each of the red, green and blue properties.
   #
-  hueToRgb = (p, q, t) ->
-    t += 1 if t < 0
-    t -= 1 if t > 1
-    return p + (q - p) * 6 * t if t < 1/6
-    return q if t < 1/2
-    return p + (q - p) * (2/3 - t) * 6 if t < 2/3
-    p
+  hueToRgb = (m1, m2, h) ->
+    h += 1 if h < 0
+    h -= 1 if h > 1
+    return m1 + (m2 - m1) * h * 6 if h * 6 < 1
+    return m2 if h * 2 < 1
+    return m1 + (m2 - m1) * (2/3 - h) * 6 if h * 3 < 2
+    m1
   
   
   ##### `hexify(n = '00')`
@@ -498,7 +503,7 @@ class window.jColour
       rgb = true if key in ['red', 'green', 'blue']
       hsl = true if key in ['hue', 'saturation', 'luminosity']
     if rgb and hsl
-      throw 'Cannot change both RGB and HSL properties'
+      throw 'Cannot change both RGB and HSL properties.'
     [rgb, hsl]
 
 

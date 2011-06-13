@@ -1,8 +1,17 @@
 (function() {
+  var __indexOf = Array.prototype.indexOf || function(item) {
+    for (var i = 0, l = this.length; i < l; i++) {
+      if (this[i] === item) return i;
+    }
+    return -1;
+  };
   window.jColour = (function() {
-    var hexify, hslToRgb, hueToRgb, minMax, rgbToHsl, throwIfIncompatible;
+    var hexify, hslToRgb, hueToRgb, minMax, properties, rgbToHsl, throwIfIncompatible;
     function jColour(col) {
       var hex, hsl, rgb;
+      if (col == null) {
+        col = '#ffffff';
+      }
       if (hex = col.match(/^#?([a-f0-9]{6,8})$/i)) {
         this.red = parseInt(hex[1].substring(0, 2), 16);
         this.green = parseInt(hex[1].substring(2, 4), 16);
@@ -10,41 +19,41 @@
         this.alpha = hex[1].substring(6, 8) ? parseInt(hex[1].substring(6, 8), 16) / 255 : 1;
         rgbToHsl(this);
       } else if (rgb = col.match(/^rgba?\(\s*(\d+)[,\s]*(\d+)[,\s]*(\d+)[,\s]*([\.\d]+)?\s*\)$/i)) {
-        this.red = rgb[1];
-        this.green = rgb[2];
-        this.blue = rgb[3];
+        this.red = parseInt(rgb[1]);
+        this.green = parseInt(rgb[2]);
+        this.blue = parseInt(rgb[3]);
         this.alpha = rgb[4] ? rgb[4] : 1;
         rgbToHsl(this);
       } else if (hsl = col.match(/^hsla?\(\s*(\d+)[,\s]*(\d+)[,\s]*(\d+)[,\s]*([\.\d]+)?\s*\)$/i)) {
-        this.hue = hsl[1];
-        this.saturation = hsl[2];
-        this.lightness = hsl[3];
+        this.hue = parseInt(hsl[1]);
+        this.saturation = parseInt(hsl[2]);
+        this.lightness = parseInt(hsl[3]);
         this.alpha = hsl[4] ? hsl[4] : 1;
         hslToRgb(this);
+      } else {
+        throw 'Invalid colour string.';
       }
     }
     jColour.prototype.hex = function(showAlpha) {
+      var hex;
       if (showAlpha == null) {
         showAlpha = false;
       }
-      if (showAlpha && this.alpha < 1) {
-        return "#" + (hexify(this.red)) + (hexify(this.green)) + (hexify(this.blue)) + (hexify(this.alpha * 255));
-      } else {
-        return "#" + (hexify(this.red)) + (hexify(this.green)) + (hexify(this.blue));
-      }
+      hex = showAlpha && this.alpha < 1 ? "#" + (hexify(this.red)) + (hexify(this.green)) + (hexify(this.blue)) + (hexify(this.alpha * 255)) : "#" + (hexify(this.red)) + (hexify(this.green)) + (hexify(this.blue));
+      return hex.toLowerCase();
     };
     jColour.prototype.rgb = function() {
       if (this.alpha === 1) {
         return "rgb(" + (Math.round(this.red)) + ", " + (Math.round(this.green)) + ", " + (Math.round(this.blue)) + ")";
       } else {
-        return "rgba(" + (Math.round(this.red)) + ", " + (Math.round(this.green)) + ", " + (Math.round(this.blue)) + ", " + (this.alpha.toPrecision(2)) + ")";
+        return "rgba(" + (Math.round(this.red)) + ", " + (Math.round(this.green)) + ", " + (Math.round(this.blue)) + ", " + (Math.round(this.alpha * 100) / 100) + ")";
       }
     };
     jColour.prototype.hsl = function() {
       if (this.alpha === 1) {
         return "hsl(" + (Math.round(this.hue)) + ", " + (Math.round(this.saturation)) + ", " + (Math.round(this.lightness)) + ")";
       } else {
-        return "hsla(" + (Math.round(this.hue)) + ", " + (Math.round(this.saturation)) + ", " + (Math.round(this.lightness)) + ", " + (this.alpha.toPrecision(2)) + ")";
+        return "hsla(" + (Math.round(this.hue)) + ", " + (Math.round(this.saturation)) + ", " + (Math.round(this.lightness)) + ", " + (Math.round(this.alpha * 100) / 100) + ")";
       }
     };
     jColour.prototype.lighten = function(amount) {
@@ -79,8 +88,16 @@
       this.saturation -= (this.saturation / 100) * percent;
       return hslToRgb(this);
     };
+    jColour.prototype.grayscale = function() {
+      this.saturation = 0;
+      return hslToRgb(this);
+    };
     jColour.prototype.adjustHue = function(degrees) {
       this.hue += degrees;
+      return hslToRgb(this);
+    };
+    jColour.prototype.complement = function() {
+      this.hue += 180;
       return hslToRgb(this);
     };
     jColour.prototype.opacify = function(amount) {
@@ -92,14 +109,6 @@
       this.alpha -= amount;
       this.alpha = minMax(this.alpha, 0, 1);
       return this;
-    };
-    jColour.prototype.grayscale = function() {
-      this.saturation = 0;
-      return hslToRgb(this);
-    };
-    jColour.prototype.complement = function() {
-      this.hue += 180;
-      return hslToRgb(this);
     };
     jColour.prototype.invert = function() {
       var color, _i, _len, _ref;
@@ -117,7 +126,9 @@
       }
       kind = throwIfIncompatible(params);
       for (key in params) {
-        this[key] += params[key];
+        if (__indexOf.call(properties, key) >= 0) {
+          this[key] += params[key];
+        }
       }
       if (kind[0]) {
         return rgbToHsl(this);
@@ -132,7 +143,9 @@
       }
       kind = throwIfIncompatible(params);
       for (key in params) {
-        this[key] += (this[key] / 100) * params[key];
+        if (__indexOf.call(properties, key) >= 0 && key !== 'hue') {
+          this[key] += (this[key] / 100) * params[key];
+        }
       }
       if (kind[0]) {
         return rgbToHsl(this);
@@ -174,8 +187,9 @@
       this.alpha = (colour.alpha * p) + (this.alpha * (1 - p));
       return rgbToHsl(this);
     };
+    properties = ['red', 'green', 'blue', 'hue', 'saturation', 'lightness', 'alpha'];
     rgbToHsl = function(c) {
-      var b, d, g, h, l, max, min, r, s, _ref;
+      var b, d, g, h, l, max, min, r, s;
       c.red = minMax(c.red, 0, 255);
       c.green = minMax(c.green, 0, 255);
       c.blue = minMax(c.blue, 0, 255);
@@ -185,34 +199,29 @@
       b = c.blue / 255;
       max = Math.max(r, g, b);
       min = Math.min(r, g, b);
-      h = s = l = (max + min) / 2;
-      if (max === min) {
-        h = s = 0;
-      } else {
-        d = max - min;
-        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      d = max - min;
+      h = (function() {
         switch (max) {
+          case min:
+            return 0;
           case r:
-            h = (g - b) / d + ((_ref = g < b) != null ? _ref : {
-              6: 0
-            });
-            break;
+            return 60 * (b - r) / d;
           case g:
-            h = (b - r) / d + 2;
-            break;
+            return 60 * (b - r) / d + 120;
           case b:
-            h = (r - g) / d + 4;
+            return 60 * (b - r) / d + 240;
         }
-        h /= 6;
-      }
-      c.hue = h * 360;
+      })();
+      l = (max + min) / 2;
+      s = max === min ? 0 : l < 0.5 ? d / (2 * l) : d / (2 - 2 * l);
+      c.hue = h % 360;
       c.saturation = s * 100;
       c.lightness = l * 100;
       return c;
     };
     hslToRgb = function(c) {
-      var b, g, h, l, p, q, r, s;
-      if (c.hue > 360) {
+      var b, g, h, l, m1, m2, r, s;
+      if (c.hue >= 360) {
         c.hue -= Math.floor(c.hue / 360) * 360;
       }
       if (c.hue < 0) {
@@ -224,37 +233,33 @@
       h = c.hue / 360;
       s = c.saturation / 100;
       l = c.lightness / 100;
-      if (s === 0) {
-        r = g = b = l;
-      } else {
-        q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-        p = 2 * l - q;
-        r = hueToRgb(p, q, h + 1 / 3);
-        g = hueToRgb(p, q, h);
-        b = hueToRgb(p, q, h - 1 / 3);
-      }
+      m2 = l < 0.5 ? l * (s + 1) : l + s - (l * s);
+      m1 = l * 2 - m2;
+      r = hueToRgb(m1, m2, h + 1 / 3);
+      g = hueToRgb(m1, m2, h);
+      b = hueToRgb(m1, m2, h - 1 / 3);
       c.red = r * 255;
       c.green = g * 255;
       c.blue = b * 255;
       return c;
     };
-    hueToRgb = function(p, q, t) {
-      if (t < 0) {
-        t += 1;
+    hueToRgb = function(m1, m2, h) {
+      if (h < 0) {
+        h += 1;
       }
-      if (t > 1) {
-        t -= 1;
+      if (h > 1) {
+        h -= 1;
       }
-      if (t < 1 / 6) {
-        return p + (q - p) * 6 * t;
+      if (h * 6 < 1) {
+        return m1 + (m2 - m1) * h * 6;
       }
-      if (t < 1 / 2) {
-        return q;
+      if (h * 2 < 1) {
+        return m2;
       }
-      if (t < 2 / 3) {
-        return p + (q - p) * (2 / 3 - t) * 6;
+      if (h * 3 < 2) {
+        return m1 + (m2 - m1) * (2 / 3 - h) * 6;
       }
-      return p;
+      return m1;
     };
     hexify = function(n) {
       if (n == null) {
@@ -282,7 +287,7 @@
         }
       }
       if (rgb && hsl) {
-        throw 'Cannot change both RGB and HSL properties';
+        throw 'Cannot change both RGB and HSL properties.';
       }
       return [rgb, hsl];
     };
