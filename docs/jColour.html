@@ -21,6 +21,8 @@ c = new jColour('hsla(0,100,100,1)');
 both representaions being recalculated. The alpha channel of a colour is stored independent
 it's RGB or HSL representation. If no alpha value is supplied, it defaults to 1.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">constructor: </span><span class="nf">(col = &#39;#ffffff&#39;) -&gt;</span>
     
+    <span class="nv">col = </span><span class="nx">colourNames</span><span class="p">[</span><span class="nx">col</span><span class="p">]</span> <span class="k">if</span> <span class="nx">col</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()</span> <span class="k">of</span> <span class="nx">colourNames</span>
+    
     <span class="k">if</span> <span class="nv">hex = </span><span class="nx">col</span><span class="p">.</span><span class="nx">match</span> <span class="sr">/^#?([a-f0-9]{6,8})$/i</span>
       <span class="vi">@red    = </span><span class="nb">parseInt</span> <span class="nx">hex</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">substring</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="mi">16</span>
       <span class="vi">@green  = </span><span class="nb">parseInt</span> <span class="nx">hex</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">substring</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="mi">16</span>
@@ -80,7 +82,15 @@ the returned representation will be HSLA.</p>
     <span class="k">else</span>
       <span class="k">return</span> <span class="s2">&quot;hsla(#{Math.round @hue}, #{Math.round @saturation}, #{Math.round @lightness}, #{Math.round(@alpha * 100) / 100})&quot;</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-9">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-9">&#182;</a>               </div>               <h3>Manipulating colours</h3>             </td>             <td class="code">               <div class="highlight"><pre>  </pre></div>             </td>           </tr>                               <tr id="section-10">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-10">&#182;</a>               </div>               <p>A jColour object can be manipulated using a range of colour manipulation methods. Each method
+  </pre></div>             </td>           </tr>                               <tr id="section-9">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-9">&#182;</a>               </div>               <h4><code>toS()</code></h4>
+
+<p>Returns the name of the colour if it is a recognised colour keyworld. Alternatively, the hex
+code will be returned.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">toS: </span><span class="o">-&gt;</span>
+    <span class="k">for</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">value</span> <span class="k">of</span> <span class="nx">colourNames</span>
+      <span class="k">return</span> <span class="nx">key</span> <span class="k">if</span> <span class="nx">@hex</span><span class="p">()</span> <span class="o">==</span> <span class="nx">value</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()</span>
+    <span class="nx">@hex</span><span class="p">()</span>
+  
+  </pre></div>             </td>           </tr>                               <tr id="section-10">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-10">&#182;</a>               </div>               <h3>Manipulating colours</h3>             </td>             <td class="code">               <div class="highlight"><pre>  </pre></div>             </td>           </tr>                               <tr id="section-11">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-11">&#182;</a>               </div>               <p>A jColour object can be manipulated using a range of colour manipulation methods. Each method
 makes the required adjustment to the colour representations and updates the jColour object.
 This allows the "chaining" of methods, for example:</p>
 
@@ -90,7 +100,7 @@ c.adjustHue(20).darken(10).transparentize(25).rgb();  # -&gt; 'rgba(204, 68, 0, 
 
 <p>Most of the colour manipulation methods allow colour values to be manipulated relatively
 (eg. 50 + 10 = 60) or scaled by a percentage (eg. 50 + 10% = 55). The name of the method should
-make it obvious as to what calculation you should expect.</p>             </td>             <td class="code">               <div class="highlight"><pre>  </pre></div>             </td>           </tr>                               <tr id="section-11">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-11">&#182;</a>               </div>               <h4><code>lighten(amount)</code></h4>
+make it obvious as to what calculation you should expect.</p>             </td>             <td class="code">               <div class="highlight"><pre>  </pre></div>             </td>           </tr>                               <tr id="section-12">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-12">&#182;</a>               </div>               <h4><code>lighten(amount)</code></h4>
 
 <p>Makes the colour lighter. Takes an amount between 0 and 100 which makes a relative adjustment
 (increase) to the current lightness.</p>
@@ -100,7 +110,7 @@ make it obvious as to what calculation you should expect.</p>             </td> 
     <span class="nx">@lightness</span> <span class="o">+=</span> <span class="nx">amount</span>
     <span class="nx">hslToRgb</span> <span class="k">this</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-12">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-12">&#182;</a>               </div>               <h4><code>lightenPercent(percent)</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-13">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-13">&#182;</a>               </div>               <h4><code>lightenPercent(percent)</code></h4>
 
 <p>Also makes the colour lighter. This method should also be passed a value between 0 and 100, but
 in this case the lightness is <em>scaled</em> up relative to it's current value.</p>
@@ -110,7 +120,7 @@ in this case the lightness is <em>scaled</em> up relative to it's current value.
     <span class="nx">@lightness</span> <span class="o">+=</span> <span class="p">(</span><span class="nx">@lightness</span> <span class="err">/ 100) * percent</span>
     <span class="nx">hslToRgb</span> <span class="k">this</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-13">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-13">&#182;</a>               </div>               <h4><code>darken(amount)</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-14">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-14">&#182;</a>               </div>               <h4><code>darken(amount)</code></h4>
 
 <p>Makes the colour darker. Takes an amount between 0 and 100 which makes a relative adjustment
 (decrease) to the current lightness.</p>
@@ -120,7 +130,7 @@ in this case the lightness is <em>scaled</em> up relative to it's current value.
     <span class="nx">@lightness</span> <span class="o">-=</span> <span class="nx">amount</span>
     <span class="nx">hslToRgb</span> <span class="k">this</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-14">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-14">&#182;</a>               </div>               <h4><code>darkenPercent(percent)</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-15">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-15">&#182;</a>               </div>               <h4><code>darkenPercent(percent)</code></h4>
 
 <p>Also makes the colour darker. This method should also be passed a value between 0 and 100, but
 in this case the lightness is <em>scaled</em> down relative to it's current value.</p>
@@ -130,7 +140,7 @@ in this case the lightness is <em>scaled</em> down relative to it's current valu
     <span class="nx">@lightness</span> <span class="o">-=</span> <span class="p">(</span><span class="nx">@lightness</span> <span class="err">/ 100) * percent</span>
     <span class="nx">hslToRgb</span> <span class="k">this</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-15">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-15">&#182;</a>               </div>               <h4><code>saturate(amount)</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-16">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-16">&#182;</a>               </div>               <h4><code>saturate(amount)</code></h4>
 
 <p>Makes the colour more saturated. Takes an amount between 0 and 100 which makes a relative
 adjustment (increase) to the current saturation.</p>
@@ -140,7 +150,7 @@ adjustment (increase) to the current saturation.</p>
     <span class="nx">@saturation</span> <span class="o">+=</span> <span class="nx">amount</span>
     <span class="nx">hslToRgb</span> <span class="k">this</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-16">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-16">&#182;</a>               </div>               <h4><code>saturatePercent(percent)</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-17">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-17">&#182;</a>               </div>               <h4><code>saturatePercent(percent)</code></h4>
 
 <p>Also makes the colour more saturated. This method should also be passed a value between 0 and
 100, but in this case the saturation is <em>scaled</em> up relative to it's current value.</p>
@@ -150,7 +160,7 @@ adjustment (increase) to the current saturation.</p>
     <span class="nx">@saturation</span> <span class="o">+=</span> <span class="p">(</span><span class="nx">@saturation</span> <span class="err">/ 100) * percent</span>
     <span class="nx">hslToRgb</span> <span class="k">this</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-17">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-17">&#182;</a>               </div>               <h4><code>desaturate(amount)</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-18">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-18">&#182;</a>               </div>               <h4><code>desaturate(amount)</code></h4>
 
 <p>Makes the colour less saturated. Takes an amount between 0 and 100 which makes a relative
 adjustment (decrease) to the current saturation.</p>
@@ -160,7 +170,7 @@ adjustment (decrease) to the current saturation.</p>
     <span class="nx">@saturation</span> <span class="o">-=</span> <span class="nx">amount</span>
     <span class="nx">hslToRgb</span> <span class="k">this</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-18">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-18">&#182;</a>               </div>               <h4><code>desaturatePercent(percent)</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-19">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-19">&#182;</a>               </div>               <h4><code>desaturatePercent(percent)</code></h4>
 
 <p>Also makes the colour less saturated. This method should also be passed a value between 0 and
 100, but in this case the saturation is <em>scaled</em> down relative to it's current value.</p>
@@ -170,7 +180,7 @@ adjustment (decrease) to the current saturation.</p>
     <span class="nx">@saturation</span> <span class="o">-=</span> <span class="p">(</span><span class="nx">@saturation</span> <span class="err">/ 100) * percent</span>
     <span class="nx">hslToRgb</span> <span class="k">this</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-19">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-19">&#182;</a>               </div>               <h4><code>grayscale()</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-20">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-20">&#182;</a>               </div>               <h4><code>grayscale()</code></h4>
 
 <p>Converts the color to grayscale. This is identical to <code>desaturate(100)</code>.</p>
 
@@ -179,7 +189,7 @@ adjustment (decrease) to the current saturation.</p>
     <span class="vi">@saturation = </span><span class="mi">0</span>
     <span class="nx">hslToRgb</span> <span class="k">this</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-20">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-20">&#182;</a>               </div>               <h4><code>adjustHue(degrees)</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-21">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-21">&#182;</a>               </div>               <h4><code>adjustHue(degrees)</code></h4>
 
 <p>Changes the hue of the colour whilst retaining the lightness and saturation. This method should
 be passed a number of degrees (usually between -360 and 360) and makes a relative adjustment to
@@ -190,7 +200,7 @@ the current hue.</p>
     <span class="nx">@hue</span> <span class="o">+=</span> <span class="nx">degrees</span>
     <span class="nx">hslToRgb</span> <span class="k">this</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-21">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-21">&#182;</a>               </div>               <h4><code>complement()</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-22">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-22">&#182;</a>               </div>               <h4><code>complement()</code></h4>
 
 <p>Returns the complement of the current colour. This is identical to <code>adjustHue(180)</code>.</p>
 
@@ -199,7 +209,7 @@ the current hue.</p>
     <span class="nx">@hue</span> <span class="o">+=</span> <span class="mi">180</span>
     <span class="nx">hslToRgb</span> <span class="k">this</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-22">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-22">&#182;</a>               </div>               <h4><code>opacify(amount)</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-23">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-23">&#182;</a>               </div>               <h4><code>opacify(amount)</code></h4>
 
 <p>Makes the colour more opaque. Takes an amount between 0 and 1 which makes a relative
 adjustment (increase) to the current alpha channel.</p>
@@ -210,7 +220,7 @@ adjustment (increase) to the current alpha channel.</p>
     <span class="vi">@alpha = </span><span class="nx">minMax</span> <span class="nx">@alpha</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span>
     <span class="k">this</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-23">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-23">&#182;</a>               </div>               <h4><code>transparentize(amount)</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-24">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-24">&#182;</a>               </div>               <h4><code>transparentize(amount)</code></h4>
 
 <p>Makes the colour more transparent. Takes an amount between 0 and 100 which makes a relative
 adjustment (decrease) to the current alpha channel.</p>
@@ -221,7 +231,7 @@ adjustment (decrease) to the current alpha channel.</p>
     <span class="vi">@alpha = </span><span class="nx">minMax</span> <span class="nx">@alpha</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span>
     <span class="k">this</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-24">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-24">&#182;</a>               </div>               <h4><code>invert()</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-25">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-25">&#182;</a>               </div>               <h4><code>invert()</code></h4>
 
 <p>Returns the inverse (negative) of the color. The red, green, and blue values are inverted, while
 the opacity is left alone.</p>
@@ -232,7 +242,7 @@ the opacity is left alone.</p>
       <span class="err">@</span><span class="p">[</span><span class="nx">color</span><span class="p">]</span> <span class="o">=</span> <span class="mi">255</span> <span class="o">-</span> <span class="err">@</span><span class="p">[</span><span class="nx">color</span><span class="p">]</span>
     <span class="nx">rgbToHsl</span> <span class="k">this</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-25">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-25">&#182;</a>               </div>               <h4><code>adjustColour(params = {})</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-26">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-26">&#182;</a>               </div>               <h4><code>adjustColour(params = {})</code></h4>
 
 <p>Makes a relative adjustment to one or more properties of the colour. Takes an object with the
 properties of red, green, blue, hue, saturation, lightness and alpha. All properties are
@@ -259,7 +269,7 @@ c.adjustColour({
       <span class="err">@</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">+=</span> <span class="nx">params</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="k">if</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">properties</span>
     <span class="k">if</span> <span class="nx">kind</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">then</span> <span class="nx">rgbToHsl</span> <span class="k">this</span> <span class="k">else</span> <span class="nx">hslToRgb</span> <span class="k">this</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-26">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-26">&#182;</a>               </div>               <h4><code>scaleColour(params = {})</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-27">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-27">&#182;</a>               </div>               <h4><code>scaleColour(params = {})</code></h4>
 
 <p>Makes a scaled adjustment to one or more properties of the colour. Takes an object with the
 properties of red, green, blue, saturation, lightness and alpha. Note that you can't scale the
@@ -277,7 +287,8 @@ c.scaleColour({
   lightness:  25,
   saturation: -10
 })
-</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">scaleColour: </span><span class="nf">(params = {}) -&gt;</span></pre></div>             </td>           </tr>                               <tr id="section-27">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-27">&#182;</a>               </div>               <p>TODO filter params</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nv">kind = </span><span class="nx">throwIfIncompatible</span> <span class="nx">params</span>
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">scaleColour: </span><span class="nf">(params = {}) -&gt;</span>
+    <span class="nv">kind = </span><span class="nx">throwIfIncompatible</span> <span class="nx">params</span>
     <span class="k">for</span> <span class="nx">key</span> <span class="k">of</span> <span class="nx">params</span>
       <span class="err">@</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="err">@</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span> <span class="o">*</span> <span class="nx">params</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="k">if</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">properties</span> <span class="o">and</span> <span class="nx">key</span> <span class="o">isnt</span> <span class="s1">&#39;hue&#39;</span>
     <span class="k">if</span> <span class="nx">kind</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">then</span> <span class="nx">rgbToHsl</span> <span class="k">this</span> <span class="k">else</span> <span class="nx">hslToRgb</span> <span class="k">this</span>
@@ -305,9 +316,9 @@ c.changeColour({
 })
 </code></pre>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">changeColour: </span><span class="nf">(params = {}) -&gt;</span></pre></div>             </td>           </tr>                               <tr id="section-29">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-29">&#182;</a>               </div>               <p>TODO filter params</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nv">kind = </span><span class="nx">throwIfIncompatible</span> <span class="nx">params</span>
     <span class="k">for</span> <span class="nx">key</span> <span class="k">of</span> <span class="nx">params</span>
-      <span class="err">@</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">params</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span>
+      <span class="err">@</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">params</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="k">if</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">properties</span>
     <span class="k">if</span> <span class="nx">kind</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">then</span> <span class="nx">rgbToHsl</span> <span class="k">this</span> <span class="k">else</span> <span class="nx">hslToRgb</span> <span class="k">this</span>
-  
+    
   </pre></div>             </td>           </tr>                               <tr id="section-30">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-30">&#182;</a>               </div>               <h4><code>mixWith(colour, weight = 50)</code></h4>
 
 <p>Mixes the colour with another 'mix' colour. The mix colour can be passed as either a jColour
@@ -337,11 +348,161 @@ red.mixWith('#ffffff', 75).rgb();   # -&gt; 'rgb(255, 191, 191)'
     
     <span class="nx">rgbToHsl</span> <span class="k">this</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-31">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-31">&#182;</a>               </div>               <h3>Private helper methods</h3>
+  </pre></div>             </td>           </tr>                               <tr id="section-31">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-31">&#182;</a>               </div>               <h3>Private properties</h3>             </td>             <td class="code">               <div class="highlight"><pre>  </pre></div>             </td>           </tr>                               <tr id="section-32">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-32">&#182;</a>               </div>               <p>This properties array is useful to have around.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">properties = </span><span class="p">[</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;hue&#39;</span><span class="p">,</span> <span class="s1">&#39;saturation&#39;</span><span class="p">,</span> <span class="s1">&#39;lightness&#39;</span><span class="p">,</span> <span class="s1">&#39;alpha&#39;</span><span class="p">]</span>  
+  
+  </pre></div>             </td>           </tr>                               <tr id="section-33">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-33">&#182;</a>               </div>               <p>A mahoosive list of recognised colour keyword names as defined at
+<a href="http://www.w3.org/TR/SVG/types.html#ColorKeywords">http://www.w3.org/TR/SVG/types.html#ColorKeywords</a></p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">colourNames = </span>
+    <span class="nv">aliceblue: </span>           <span class="s1">&#39;#F0F8FF&#39;</span>
+    <span class="nv">antiquewhite: </span>        <span class="s1">&#39;#FAEBD7&#39;</span>
+    <span class="nv">aqua: </span>                <span class="s1">&#39;#00FFFF&#39;</span>
+    <span class="nv">aquamarine: </span>          <span class="s1">&#39;#7FFFD4&#39;</span>
+    <span class="nv">azure: </span>               <span class="s1">&#39;#F0FFFF&#39;</span>
+    <span class="nv">beige: </span>               <span class="s1">&#39;#F5F5DC&#39;</span>
+    <span class="nv">bisque: </span>              <span class="s1">&#39;#FFE4C4&#39;</span>
+    <span class="nv">black: </span>               <span class="s1">&#39;#000000&#39;</span>
+    <span class="nv">blanchedalmond: </span>      <span class="s1">&#39;#FFEBCD&#39;</span>
+    <span class="nv">blue: </span>                <span class="s1">&#39;#0000FF&#39;</span>
+    <span class="nv">blueviolet: </span>          <span class="s1">&#39;#8A2BE2&#39;</span>
+    <span class="nv">brown: </span>               <span class="s1">&#39;#A52A2A&#39;</span>
+    <span class="nv">burlywood: </span>           <span class="s1">&#39;#DEB887&#39;</span>
+    <span class="nv">cadetblue: </span>           <span class="s1">&#39;#5F9EA0&#39;</span>
+    <span class="nv">chartreuse: </span>          <span class="s1">&#39;#7FFF00&#39;</span>
+    <span class="nv">chocolate: </span>           <span class="s1">&#39;#D2691E&#39;</span>
+    <span class="nv">coral: </span>               <span class="s1">&#39;#FF7F50&#39;</span>
+    <span class="nv">cornflowerblue: </span>      <span class="s1">&#39;#6495ED&#39;</span>
+    <span class="nv">cornsilk: </span>            <span class="s1">&#39;#FFF8DC&#39;</span>
+    <span class="nv">crimson: </span>             <span class="s1">&#39;#DC143C&#39;</span>
+    <span class="nv">cyan: </span>                <span class="s1">&#39;#00FFFF&#39;</span>
+    <span class="nv">darkblue: </span>            <span class="s1">&#39;#00008B&#39;</span>
+    <span class="nv">darkcyan: </span>            <span class="s1">&#39;#008B8B&#39;</span>
+    <span class="nv">darkgoldenrod: </span>       <span class="s1">&#39;#B8860B&#39;</span>
+    <span class="nv">darkgray: </span>            <span class="s1">&#39;#A9A9A9&#39;</span>
+    <span class="nv">darkgreen: </span>           <span class="s1">&#39;#006400&#39;</span>
+    <span class="nv">darkgrey: </span>            <span class="s1">&#39;#A9A9A9&#39;</span>
+    <span class="nv">darkkhaki: </span>           <span class="s1">&#39;#BDB76B&#39;</span>
+    <span class="nv">darkmagenta: </span>         <span class="s1">&#39;#8B008B&#39;</span>
+    <span class="nv">darkolivegreen: </span>      <span class="s1">&#39;#556B2F&#39;</span>
+    <span class="nv">darkorange: </span>          <span class="s1">&#39;#FF8C00&#39;</span>
+    <span class="nv">darkorchid: </span>          <span class="s1">&#39;#9932CC&#39;</span>
+    <span class="nv">darkred: </span>             <span class="s1">&#39;#8B0000&#39;</span>
+    <span class="nv">darksalmon: </span>          <span class="s1">&#39;#E9967A&#39;</span>
+    <span class="nv">darkseagreen: </span>        <span class="s1">&#39;#8FBC8F&#39;</span>
+    <span class="nv">darkslateblue: </span>       <span class="s1">&#39;#483D8B&#39;</span>
+    <span class="nv">darkslategray: </span>       <span class="s1">&#39;#2F4F4F&#39;</span>
+    <span class="nv">darkslategrey: </span>       <span class="s1">&#39;#2F4F4F&#39;</span>
+    <span class="nv">darkturquoise: </span>       <span class="s1">&#39;#00CED1&#39;</span>
+    <span class="nv">darkviolet: </span>          <span class="s1">&#39;#9400D3&#39;</span>
+    <span class="nv">deeppink: </span>            <span class="s1">&#39;#FF1493&#39;</span>
+    <span class="nv">deepskyblue: </span>         <span class="s1">&#39;#00BFFF&#39;</span>
+    <span class="nv">dimgray: </span>             <span class="s1">&#39;#696969&#39;</span>
+    <span class="nv">dimgrey: </span>             <span class="s1">&#39;#696969&#39;</span>
+    <span class="nv">dodgerblue: </span>          <span class="s1">&#39;#1E90FF&#39;</span>
+    <span class="nv">firebrick: </span>           <span class="s1">&#39;#B22222&#39;</span>
+    <span class="nv">floralwhite: </span>         <span class="s1">&#39;#FFFAF0&#39;</span>
+    <span class="nv">forestgreen: </span>         <span class="s1">&#39;#228B22&#39;</span>
+    <span class="nv">fuchsia: </span>             <span class="s1">&#39;#FF00FF&#39;</span>
+    <span class="nv">gainsboro: </span>           <span class="s1">&#39;#DCDCDC&#39;</span>
+    <span class="nv">ghostwhite: </span>          <span class="s1">&#39;#F8F8FF&#39;</span>
+    <span class="nv">gold: </span>                <span class="s1">&#39;#FFD700&#39;</span>
+    <span class="nv">goldenrod: </span>           <span class="s1">&#39;#DAA520&#39;</span>
+    <span class="nv">gray: </span>                <span class="s1">&#39;#808080&#39;</span>
+    <span class="nv">green: </span>               <span class="s1">&#39;#008000&#39;</span>
+    <span class="nv">greenyellow: </span>         <span class="s1">&#39;#ADFF2F&#39;</span>
+    <span class="nv">grey: </span>                <span class="s1">&#39;#808080&#39;</span>
+    <span class="nv">honeydew: </span>            <span class="s1">&#39;#F0FFF0&#39;</span>
+    <span class="nv">hotpink: </span>             <span class="s1">&#39;#FF69B4&#39;</span>
+    <span class="nv">indianred: </span>           <span class="s1">&#39;#CD5C5C&#39;</span>
+    <span class="nv">indigo: </span>              <span class="s1">&#39;#4B0082&#39;</span>
+    <span class="nv">ivory: </span>               <span class="s1">&#39;#FFFFF0&#39;</span>
+    <span class="nv">khaki: </span>               <span class="s1">&#39;#F0E68C&#39;</span>
+    <span class="nv">lavender: </span>            <span class="s1">&#39;#E6E6FA&#39;</span>
+    <span class="nv">lavenderblush: </span>       <span class="s1">&#39;#FFF0F5&#39;</span>
+    <span class="nv">lawngreen: </span>           <span class="s1">&#39;#7CFC00&#39;</span>
+    <span class="nv">lemonchiffon: </span>        <span class="s1">&#39;#FFFACD&#39;</span>
+    <span class="nv">lightblue: </span>           <span class="s1">&#39;#ADD8E6&#39;</span>
+    <span class="nv">lightcoral: </span>          <span class="s1">&#39;#F08080&#39;</span>
+    <span class="nv">lightcyan: </span>           <span class="s1">&#39;#E0FFFF&#39;</span>
+    <span class="nv">lightgoldenrodyellow: </span><span class="s1">&#39;#FAFAD2&#39;</span>
+    <span class="nv">lightgray: </span>           <span class="s1">&#39;#D3D3D3&#39;</span>
+    <span class="nv">lightgreen: </span>          <span class="s1">&#39;#90EE90&#39;</span>
+    <span class="nv">lightgrey: </span>           <span class="s1">&#39;#D3D3D3&#39;</span>
+    <span class="nv">lightpink: </span>           <span class="s1">&#39;#FFB6C1&#39;</span>
+    <span class="nv">lightsalmon: </span>         <span class="s1">&#39;#FFA07A&#39;</span>
+    <span class="nv">lightseagreen: </span>       <span class="s1">&#39;#20B2AA&#39;</span>
+    <span class="nv">lightskyblue: </span>        <span class="s1">&#39;#87CEFA&#39;</span>
+    <span class="nv">lightslategray: </span>      <span class="s1">&#39;#778899&#39;</span>
+    <span class="nv">lightslategrey: </span>      <span class="s1">&#39;#778899&#39;</span>
+    <span class="nv">lightsteelblue: </span>      <span class="s1">&#39;#B0C4DE&#39;</span>
+    <span class="nv">lightyellow: </span>         <span class="s1">&#39;#FFFFE0&#39;</span>
+    <span class="nv">lime: </span>                <span class="s1">&#39;#00FF00&#39;</span>
+    <span class="nv">limegreen: </span>           <span class="s1">&#39;#32CD32&#39;</span>
+    <span class="nv">linen: </span>               <span class="s1">&#39;#FAF0E6&#39;</span>
+    <span class="nv">magenta: </span>             <span class="s1">&#39;#FF00FF&#39;</span>
+    <span class="nv">maroon: </span>              <span class="s1">&#39;#800000&#39;</span>
+    <span class="nv">mediumaquamarine: </span>    <span class="s1">&#39;#66CDAA&#39;</span>
+    <span class="nv">mediumblue: </span>          <span class="s1">&#39;#0000CD&#39;</span>
+    <span class="nv">mediumorchid: </span>        <span class="s1">&#39;#BA55D3&#39;</span>
+    <span class="nv">mediumpurple: </span>        <span class="s1">&#39;#9370DB&#39;</span>
+    <span class="nv">mediumseagreen: </span>      <span class="s1">&#39;#3CB371&#39;</span>
+    <span class="nv">mediumslateblue: </span>     <span class="s1">&#39;#7B68EE&#39;</span>
+    <span class="nv">mediumspringgreen: </span>   <span class="s1">&#39;#00FA9A&#39;</span>
+    <span class="nv">mediumturquoise: </span>     <span class="s1">&#39;#48D1CC&#39;</span>
+    <span class="nv">mediumvioletred: </span>     <span class="s1">&#39;#C71585&#39;</span>
+    <span class="nv">midnightblue: </span>        <span class="s1">&#39;#191970&#39;</span>
+    <span class="nv">mintcream: </span>           <span class="s1">&#39;#F5FFFA&#39;</span>
+    <span class="nv">mistyrose: </span>           <span class="s1">&#39;#FFE4E1&#39;</span>
+    <span class="nv">moccasin: </span>            <span class="s1">&#39;#FFE4B5&#39;</span>
+    <span class="nv">navajowhite: </span>         <span class="s1">&#39;#FFDEAD&#39;</span>
+    <span class="nv">navy: </span>                <span class="s1">&#39;#000080&#39;</span>
+    <span class="nv">oldlace: </span>             <span class="s1">&#39;#FDF5E6&#39;</span>
+    <span class="nv">olive: </span>               <span class="s1">&#39;#808000&#39;</span>
+    <span class="nv">olivedrab: </span>           <span class="s1">&#39;#6B8E23&#39;</span>
+    <span class="nv">orange: </span>              <span class="s1">&#39;#FFA500&#39;</span>
+    <span class="nv">orangered: </span>           <span class="s1">&#39;#FF4500&#39;</span>
+    <span class="nv">orchid: </span>              <span class="s1">&#39;#DA70D6&#39;</span>
+    <span class="nv">palegoldenrod: </span>       <span class="s1">&#39;#EEE8AA&#39;</span>
+    <span class="nv">palegreen: </span>           <span class="s1">&#39;#98FB98&#39;</span>
+    <span class="nv">paleturquoise: </span>       <span class="s1">&#39;#AFEEEE&#39;</span>
+    <span class="nv">palevioletred: </span>       <span class="s1">&#39;#DB7093&#39;</span>
+    <span class="nv">papayawhip: </span>          <span class="s1">&#39;#FFEFD5&#39;</span>
+    <span class="nv">peachpuff: </span>           <span class="s1">&#39;#FFDAB9&#39;</span>
+    <span class="nv">peru: </span>                <span class="s1">&#39;#CD853F&#39;</span>
+    <span class="nv">pink: </span>                <span class="s1">&#39;#FFC0CB&#39;</span>
+    <span class="nv">plum: </span>                <span class="s1">&#39;#DDA0DD&#39;</span>
+    <span class="nv">powderblue: </span>          <span class="s1">&#39;#B0E0E6&#39;</span>
+    <span class="nv">purple: </span>              <span class="s1">&#39;#800080&#39;</span>
+    <span class="nv">red: </span>                 <span class="s1">&#39;#FF0000&#39;</span>
+    <span class="nv">rosybrown: </span>           <span class="s1">&#39;#BC8F8F&#39;</span>
+    <span class="nv">royalblue: </span>           <span class="s1">&#39;#4169E1&#39;</span>
+    <span class="nv">saddlebrown: </span>         <span class="s1">&#39;#8B4513&#39;</span>
+    <span class="nv">salmon: </span>              <span class="s1">&#39;#FA8072&#39;</span>
+    <span class="nv">sandybrown: </span>          <span class="s1">&#39;#F4A460&#39;</span>
+    <span class="nv">seagreen: </span>            <span class="s1">&#39;#2E8B57&#39;</span>
+    <span class="nv">seashell: </span>            <span class="s1">&#39;#FFF5EE&#39;</span>
+    <span class="nv">sienna: </span>              <span class="s1">&#39;#A0522D&#39;</span>
+    <span class="nv">silver: </span>              <span class="s1">&#39;#C0C0C0&#39;</span>
+    <span class="nv">skyblue: </span>             <span class="s1">&#39;#87CEEB&#39;</span>
+    <span class="nv">slateblue: </span>           <span class="s1">&#39;#6A5ACD&#39;</span>
+    <span class="nv">slategray: </span>           <span class="s1">&#39;#708090&#39;</span>
+    <span class="nv">slategrey: </span>           <span class="s1">&#39;#708090&#39;</span>
+    <span class="nv">snow: </span>                <span class="s1">&#39;#FFFAFA&#39;</span>
+    <span class="nv">springgreen: </span>         <span class="s1">&#39;#00FF7F&#39;</span>
+    <span class="nv">steelblue: </span>           <span class="s1">&#39;#4682B4&#39;</span>
+    <span class="nv">tan: </span>                 <span class="s1">&#39;#D2B48C&#39;</span>
+    <span class="nv">teal: </span>                <span class="s1">&#39;#008080&#39;</span>
+    <span class="nv">thistle: </span>             <span class="s1">&#39;#D8BFD8&#39;</span>
+    <span class="nv">tomato: </span>              <span class="s1">&#39;#FF6347&#39;</span>
+    <span class="nv">turquoise: </span>           <span class="s1">&#39;#40E0D0&#39;</span>
+    <span class="nv">violet: </span>              <span class="s1">&#39;#EE82EE&#39;</span>
+    <span class="nv">wheat: </span>               <span class="s1">&#39;#F5DEB3&#39;</span>
+    <span class="nv">white: </span>               <span class="s1">&#39;#FFFFFF&#39;</span>
+    <span class="nv">whitesmoke: </span>          <span class="s1">&#39;#F5F5F5&#39;</span>
+    <span class="nv">yellow: </span>              <span class="s1">&#39;#FFFF00&#39;</span>
+    <span class="nv">yellowgreen: </span>         <span class="s1">&#39;#9ACD32&#39;</span>
+  
+  </pre></div>             </td>           </tr>                               <tr id="section-34">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-34">&#182;</a>               </div>               <h3>Private helper methods</h3>
 
-<p>The following methods are all used internally and are not accessible from outside the jColour object.</p>             </td>             <td class="code">               <div class="highlight"><pre>  
-  <span class="nv">properties = </span><span class="p">[</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;hue&#39;</span><span class="p">,</span> <span class="s1">&#39;saturation&#39;</span><span class="p">,</span> <span class="s1">&#39;lightness&#39;</span><span class="p">,</span> <span class="s1">&#39;alpha&#39;</span><span class="p">]</span>
-  </pre></div>             </td>           </tr>                               <tr id="section-32">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-32">&#182;</a>               </div>               <h4><code>rgbToHsl(c)</code></h4>
+<p>The following methods are all used internally and are not accessible from outside the jColour object.</p>             </td>             <td class="code">               <div class="highlight"><pre>  </pre></div>             </td>           </tr>                               <tr id="section-35">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-35">&#182;</a>               </div>               <h4><code>rgbToHsl(c)</code></h4>
 
 <p>Converts the RGB representation to a HSL representation.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">rgbToHsl = </span><span class="nf">(c) -&gt;</span>
     <span class="nv">c.red   = </span><span class="nx">minMax</span> <span class="nx">c</span><span class="p">.</span><span class="nx">red</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span>
@@ -356,9 +517,9 @@ red.mixWith('#ffffff', 75).rgb();   # -&gt; 'rgb(255, 191, 191)'
     <span class="nv">d = </span><span class="nx">max</span> <span class="o">-</span> <span class="nx">min</span>
     <span class="nv">h = </span><span class="k">switch</span> <span class="nx">max</span>
       <span class="k">when</span> <span class="nx">min</span> <span class="k">then</span> <span class="mi">0</span>
-      <span class="k">when</span> <span class="nx">r</span> <span class="k">then</span> <span class="mi">60</span> <span class="o">*</span> <span class="p">(</span><span class="nx">b</span> <span class="o">-</span> <span class="nx">r</span><span class="p">)</span> <span class="o">/</span> <span class="nx">d</span>
+      <span class="k">when</span> <span class="nx">r</span> <span class="k">then</span> <span class="mi">60</span> <span class="o">*</span> <span class="p">(</span><span class="nx">g</span> <span class="o">-</span> <span class="nx">b</span><span class="p">)</span> <span class="o">/</span> <span class="nx">d</span>
       <span class="k">when</span> <span class="nx">g</span> <span class="k">then</span> <span class="mi">60</span> <span class="o">*</span> <span class="p">(</span><span class="nx">b</span> <span class="o">-</span> <span class="nx">r</span><span class="p">)</span> <span class="o">/</span> <span class="nx">d</span> <span class="o">+</span> <span class="mi">120</span>
-      <span class="k">when</span> <span class="nx">b</span> <span class="k">then</span> <span class="mi">60</span> <span class="o">*</span> <span class="p">(</span><span class="nx">b</span> <span class="o">-</span> <span class="nx">r</span><span class="p">)</span> <span class="o">/</span> <span class="nx">d</span> <span class="o">+</span> <span class="mi">240</span>
+      <span class="k">when</span> <span class="nx">b</span> <span class="k">then</span> <span class="mi">60</span> <span class="o">*</span> <span class="p">(</span><span class="nx">r</span> <span class="o">-</span> <span class="nx">g</span><span class="p">)</span> <span class="o">/</span> <span class="nx">d</span> <span class="o">+</span> <span class="mi">240</span>
     <span class="nv">l = </span><span class="p">(</span><span class="nx">max</span> <span class="o">+</span> <span class="nx">min</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
     <span class="nv">s = </span><span class="k">if</span> <span class="nx">max</span> <span class="o">==</span> <span class="nx">min</span>
       <span class="mi">0</span>
@@ -371,7 +532,7 @@ red.mixWith('#ffffff', 75).rgb();   # -&gt; 'rgb(255, 191, 191)'
     <span class="nv">c.lightness   = </span><span class="nx">l</span> <span class="o">*</span> <span class="mi">100</span>
     <span class="nx">c</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-33">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-33">&#182;</a>               </div>               <h4><code>hslToRgb(c)</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-36">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-36">&#182;</a>               </div>               <h4><code>hslToRgb(c)</code></h4>
 
 <p>Converts the HSL representation to a RGB representation.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">hslToRgb = </span><span class="nf">(c) -&gt;</span>
     <span class="nx">c</span><span class="p">.</span><span class="nx">hue</span> <span class="o">-=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">hue</span><span class="err">/360)*360 if c.hue &gt;= 360</span>
@@ -392,7 +553,7 @@ red.mixWith('#ffffff', 75).rgb();   # -&gt; 'rgb(255, 191, 191)'
     <span class="nv">c.blue  = </span><span class="nx">b</span> <span class="o">*</span> <span class="mi">255</span>
     <span class="nx">c</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-34">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-34">&#182;</a>               </div>               <h4><code>hueToRgb(p, q, t)</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-37">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-37">&#182;</a>               </div>               <h4><code>hueToRgb(p, q, t)</code></h4>
 
 <p>Algorithm for converting hue to each of the red, green and blue properties.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">hueToRgb = </span><span class="nf">(m1, m2, h) -&gt;</span>
     <span class="nx">h</span> <span class="o">+=</span> <span class="mi">1</span> <span class="k">if</span> <span class="nx">h</span> <span class="o">&lt;</span> <span class="mi">0</span>
@@ -402,7 +563,7 @@ red.mixWith('#ffffff', 75).rgb();   # -&gt; 'rgb(255, 191, 191)'
     <span class="k">return</span> <span class="nx">m1</span> <span class="o">+</span> <span class="p">(</span><span class="nx">m2</span> <span class="o">-</span> <span class="nx">m1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span> <span class="o">-</span> <span class="nx">h</span><span class="p">)</span> <span class="o">*</span> <span class="mi">6</span> <span class="k">if</span> <span class="nx">h</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">&lt;</span> <span class="mi">2</span>
     <span class="nx">m1</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-35">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-35">&#182;</a>               </div>               <h4><code>hexify(n = '00')</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-38">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-38">&#182;</a>               </div>               <h4><code>hexify(n = '00')</code></h4>
 
 <p>Algorithm for converting each of the RGB colour channels to it's hex value.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">hexify = </span><span class="nf">(n = &#39;00&#39;) -&gt;</span>
     <span class="nv">n = </span><span class="nb">parseInt</span> <span class="nx">n</span>
@@ -410,12 +571,12 @@ red.mixWith('#ffffff', 75).rgb();   # -&gt; 'rgb(255, 191, 191)'
     <span class="nv">n = </span><span class="nb">Math</span><span class="p">.</span><span class="nx">round</span> <span class="nx">minMax</span><span class="p">(</span><span class="nx">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
     <span class="s2">&quot;0123456789ABCDEF&quot;</span><span class="p">.</span><span class="nx">charAt</span><span class="p">((</span><span class="nx">n</span><span class="o">-</span><span class="nx">n</span><span class="o">%</span><span class="mi">16</span><span class="p">)</span><span class="o">/</span><span class="mi">16</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;0123456789ABCDEF&quot;</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="nx">n</span><span class="o">%</span><span class="mi">16</span><span class="p">)</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-36">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-36">&#182;</a>               </div>               <h4><code>minMax(i, min, max)</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-39">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-39">&#182;</a>               </div>               <h4><code>minMax(i, min, max)</code></h4>
 
 <p>Helper method to clip a provided number between a minimum and maximum value.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">minMax = </span><span class="nf">(i, min, max) -&gt;</span>
     <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">min</span><span class="p">),</span> <span class="nx">max</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-37">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-37">&#182;</a>               </div>               <h4><code>throwIfIncompatible(params)</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-40">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-40">&#182;</a>               </div>               <h4><code>throwIfIncompatible(params)</code></h4>
 
 <p>Throws an error if incompatible colour properties are provided.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">throwIfIncompatible = </span><span class="nf">(params) -&gt;</span>
     <span class="nv">rgb = hsl = </span><span class="kc">false</span>
@@ -424,7 +585,7 @@ red.mixWith('#ffffff', 75).rgb();   # -&gt; 'rgb(255, 191, 191)'
       <span class="nv">hsl = </span><span class="kc">true</span> <span class="k">if</span> <span class="nx">key</span> <span class="k">in</span> <span class="p">[</span><span class="s1">&#39;hue&#39;</span><span class="p">,</span> <span class="s1">&#39;saturation&#39;</span><span class="p">,</span> <span class="s1">&#39;luminosity&#39;</span><span class="p">]</span>
     <span class="k">if</span> <span class="nx">rgb</span> <span class="o">and</span> <span class="nx">hsl</span>
       <span class="k">throw</span> <span class="s1">&#39;Cannot change both RGB and HSL properties.&#39;</span>
-    <span class="p">[</span><span class="nx">rgb</span><span class="p">,</span> <span class="nx">hsl</span><span class="p">]</span></pre></div>             </td>           </tr>                               <tr id="section-38">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-38">&#182;</a>               </div>               <h3>Copyright</h3>
+    <span class="p">[</span><span class="nx">rgb</span><span class="p">,</span> <span class="nx">hsl</span><span class="p">]</span></pre></div>             </td>           </tr>                               <tr id="section-41">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-41">&#182;</a>               </div>               <h3>Copyright</h3>
 
 <p>Copyright (c) 2010-2011 <a href="http://aaronrussell.co.uk">Aaron Russell</a>.
 Licensed under the <a href="http://www.opensource.org/licenses/mit-license.php">MIT license</a>.</p>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 

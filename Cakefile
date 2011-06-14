@@ -6,7 +6,7 @@ task 'compile', 'Compile JavaScript from the source code', ->
     console.log stdout + stderr
 
 task 'minify', 'Minify the compiled JavaScript using Google Closure', ->
-  exec 'java -jar "./tools/compiler.jar" --js build/jColour.js --js_output_file build/jColour.min.js', (err, stdout, stderr) ->
+  exec 'java -jar "./lib/Closure/compiler.jar" --js build/jColour.js --js_output_file build/jColour.min.js', (err, stdout, stderr) ->
     throw err if err
     console.log stdout + stderr
 

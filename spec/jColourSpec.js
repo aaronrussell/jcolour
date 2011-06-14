@@ -2,6 +2,11 @@ describe('Creating a jColour object', function(){
   
   var c, c1, c2;
   
+  it('should recognise a colour name', function(){
+    c = new jColour('cornflowerblue');
+    expect(c.hex()).toEqual('#6495ed')
+  });
+  
   it('should recognise a hex string', function(){
     c1 = new jColour('#ff0000');
     c2 = new jColour('#ff000077');
@@ -42,19 +47,19 @@ describe('Colour conversions', function(){
   it('should convert from hex', function(){
     c = new jColour('#5baa30');
     expect(c.rgb()).toEqual('rgb(91, 170, 48)');
-    expect(c.hsl()).toEqual('hsl(99, 72, 67)');
+    expect(c.hsl()).toEqual('hsl(99, 56, 43)');
   });
   
   it('should convert from rgb', function(){
     c = new jColour('rgb(147, 53, 213)');
     expect(c.hex()).toEqual('#9335d5');
-    expect(c.hsl()).toEqual('hsl(275, 75, 84)');
+    expect(c.hsl()).toEqual('hsl(275, 66, 52)');
   });
   
   it('should convert from hsl', function(){
     c = new jColour('hsl(159, 42, 84)');
-    expect(c.rgb()).toEqual('rgb(125, 215, 184)');
-    expect(c.hex()).toEqual('#7dd7b8');
+    expect(c.rgb()).toEqual('rgb(197, 231, 219)');
+    expect(c.hex()).toEqual('#c5e7db');
   });
   
 });
@@ -82,6 +87,11 @@ describe('Accessing colour representations', function(){
   it('should return a hsl value', function(){
     expect(c1.hsl()).toEqual('hsl(0, 100, 50)');
     expect(c2.hsl()).toEqual('hsla(0, 100, 50, 0.5)');
+  });
+  
+  it('should return a colour name', function(){
+    expect(c1.toS()).toEqual('red');
+    expect(c2.toS()).toEqual('red');
   });
   
 });
@@ -310,7 +320,7 @@ describe('Scaling a colour', function(){
       saturation: 15,
       lightness:  -12
     });
-    expect(c.hsl()).toEqual('hsla(210, 58, 69, 0.6)'); 
+    expect(c.hsl()).toEqual('hsla(210, 55, 52, 0.6)'); 
   });
   
   it('should ignore invalid properties', function(){
@@ -335,4 +345,79 @@ describe('Scaling a colour', function(){
 });
 
 
+describe('Changing a colour', function(){
+  
+  var c;
+  
+  beforeEach(function(){
+    c = new jColour('rgba(100, 150, 200, 0.6)');
+  });
+  
+  it('should change the rgba properties', function(){
+    c.changeColour({
+      red:    -15,
+      blue:   10,
+      alpha:  0.25
+    });
+    expect(c.rgb()).toEqual('rgba(0, 150, 10, 0.25)');
+  });
+  
+  it('should scale the hsla properties', function(){
+    c.changeColour({
+      hue:        220,
+      saturation: 15,
+      lightness:  -12
+    });
+    expect(c.hsl()).toEqual('hsla(220, 15, 0, 0.6)'); 
+  });
+  
+  it('should ignore invalid properties', function(){
+    c.changeColour({
+      foo:    25,
+      bar:    80,
+      alpha:  1
+    });
+    expect(c.rgb()).toEqual('rgb(100, 150, 200)');
+  });
+  
+  it('should throw an error when incompatible params passed', function(){
+    expect(function(){
+      c.changeColour({
+        red:  25,
+        hue:  25
+      });
+    }).toThrow(new Error('Cannot change both RGB and HSL properties.'));
+  });
+  
+});
 
+
+describe('Mixing two colours', function(){
+  
+  var c1, c2, mix;
+  
+  beforeEach(function(){
+    c1 = new jColour('rgba(111, 175, 215, 0.6)');
+    c2 = new jColour('rgba(23, 56, 155, 0.9)');
+  });
+  
+  it('should mix evenly', function(){
+    mix = c1.mixWith(c2);
+    expect(mix.rgb()).toEqual('rgba(54, 98, 176, 0.75)');
+  });
+  
+  it('should mix lightly', function(){
+    mix = c1.mixWith(c2, 17);
+    expect(mix.rgb()).toEqual('rgba(87, 142, 198, 0.65)');
+  });
+  
+  it('should mix heavily', function(){
+    mix = c1.mixWith(c2, 91);
+    expect(mix.rgb()).toEqual('rgba(27, 62, 158, 0.87)');
+  });
+  
+  it('should throw an error when incompatible params passed', function(){
+    
+  });
+  
+});
