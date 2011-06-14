@@ -10,11 +10,14 @@
 
 #### Creating a jColour object
 
-class window.jColour
+class jColour
   
   # Create a new jColour object by passing a colour string. jColour will parse a string in any of
-  # the following formats: hexidecimal, rgb/a, hsl/a. For example, all the following statements work:
+  # the following formats: [recognised colour name](http://www.w3.org/TR/SVG/types.html#ColorKeywords),
+  # hexidecimal, rgb/a, hsl/a. For example, all the following statements work:
   #
+  #     c = new jColour('red');
+  #     c = new jColour('lightyellow');
   #     c = new jColour('#ff0000');
   #     c = new jColour('rgb(255,0,0)');
   #     c = new jColour('rgba(255,0,0,1)');
@@ -371,7 +374,6 @@ class window.jColour
   #     })
   #
   changeColour: (params = {}) ->
-    # TODO filter params
     kind = throwIfIncompatible params
     for key of params
       @[key] = params[key] if key in properties
@@ -675,6 +677,11 @@ class window.jColour
     if rgb and hsl
       throw 'Cannot change both RGB and HSL properties.'
     [rgb, hsl]
+  
+
+# Export jColour or attach to the window object
+#  
+root = exports ? window.jColour = jColour
 
 
 #### Copyright

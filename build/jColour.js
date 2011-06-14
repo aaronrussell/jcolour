@@ -1,11 +1,12 @@
 (function() {
+  var jColour, root;
   var __indexOf = Array.prototype.indexOf || function(item) {
     for (var i = 0, l = this.length; i < l; i++) {
       if (this[i] === item) return i;
     }
     return -1;
   };
-  window.jColour = (function() {
+  jColour = (function() {
     var colourNames, hexify, hslToRgb, hueToRgb, minMax, properties, rgbToHsl, throwIfIncompatible;
     function jColour(col) {
       var hex, hsl, rgb;
@@ -457,4 +458,5 @@
     };
     return jColour;
   })();
+  root = typeof exports !== "undefined" && exports !== null ? exports : window.jColour = jColour;
 }).call(this);

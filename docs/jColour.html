@@ -6,11 +6,14 @@ colour manipulation functions.</p>
 
 <p>jColour is written by <a href="http://aaronrussell.co.uk">Aaron Russell</a>,
 the <a href="http://github.com/aaronrussell/jcolour">source code for jColour</a> is available on Github and
-is released under the <a href="http://www.opensource.org/licenses/mit-license.php">MIT license</a>.</p>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <h3>Creating a jColour object</h3>             </td>             <td class="code">               <div class="highlight"><pre><span class="k">class</span> <span class="nb">window</span><span class="p">.</span><span class="nx">jColour</span>
+is released under the <a href="http://www.opensource.org/licenses/mit-license.php">MIT license</a>.</p>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <h3>Creating a jColour object</h3>             </td>             <td class="code">               <div class="highlight"><pre><span class="k">class</span> <span class="nx">jColour</span>
   </pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <p>Create a new jColour object by passing a colour string. jColour will parse a string in any of
-the following formats: hexidecimal, rgb/a, hsl/a. For example, all the following statements work:</p>
+the following formats: <a href="http://www.w3.org/TR/SVG/types.html#ColorKeywords">recognised colour name</a>,
+hexidecimal, rgb/a, hsl/a. For example, all the following statements work:</p>
 
-<pre><code>c = new jColour('#ff0000');
+<pre><code>c = new jColour('red');
+c = new jColour('lightyellow');
+c = new jColour('#ff0000');
 c = new jColour('rgb(255,0,0)');
 c = new jColour('rgba(255,0,0,1)');
 c = new jColour('hsl(0,100,100)');
@@ -314,12 +317,13 @@ c.changeColour({
   lightness:  100,
   saturation: 100
 })
-</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">changeColour: </span><span class="nf">(params = {}) -&gt;</span></pre></div>             </td>           </tr>                               <tr id="section-29">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-29">&#182;</a>               </div>               <p>TODO filter params</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nv">kind = </span><span class="nx">throwIfIncompatible</span> <span class="nx">params</span>
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">changeColour: </span><span class="nf">(params = {}) -&gt;</span>
+    <span class="nv">kind = </span><span class="nx">throwIfIncompatible</span> <span class="nx">params</span>
     <span class="k">for</span> <span class="nx">key</span> <span class="k">of</span> <span class="nx">params</span>
       <span class="err">@</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">params</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="k">if</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">properties</span>
     <span class="k">if</span> <span class="nx">kind</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">then</span> <span class="nx">rgbToHsl</span> <span class="k">this</span> <span class="k">else</span> <span class="nx">hslToRgb</span> <span class="k">this</span>
     
-  </pre></div>             </td>           </tr>                               <tr id="section-30">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-30">&#182;</a>               </div>               <h4><code>mixWith(colour, weight = 50)</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-29">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-29">&#182;</a>               </div>               <h4><code>mixWith(colour, weight = 50)</code></h4>
 
 <p>Mixes the colour with another 'mix' colour. The mix colour can be passed as either a jColour
 object or a string. Each of the RGB components are averaged, optionally weighted with a given
@@ -348,9 +352,9 @@ red.mixWith('#ffffff', 75).rgb();   # -&gt; 'rgb(255, 191, 191)'
     
     <span class="nx">rgbToHsl</span> <span class="k">this</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-31">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-31">&#182;</a>               </div>               <h3>Private properties</h3>             </td>             <td class="code">               <div class="highlight"><pre>  </pre></div>             </td>           </tr>                               <tr id="section-32">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-32">&#182;</a>               </div>               <p>This properties array is useful to have around.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">properties = </span><span class="p">[</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;hue&#39;</span><span class="p">,</span> <span class="s1">&#39;saturation&#39;</span><span class="p">,</span> <span class="s1">&#39;lightness&#39;</span><span class="p">,</span> <span class="s1">&#39;alpha&#39;</span><span class="p">]</span>  
+  </pre></div>             </td>           </tr>                               <tr id="section-30">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-30">&#182;</a>               </div>               <h3>Private properties</h3>             </td>             <td class="code">               <div class="highlight"><pre>  </pre></div>             </td>           </tr>                               <tr id="section-31">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-31">&#182;</a>               </div>               <p>This properties array is useful to have around.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">properties = </span><span class="p">[</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;hue&#39;</span><span class="p">,</span> <span class="s1">&#39;saturation&#39;</span><span class="p">,</span> <span class="s1">&#39;lightness&#39;</span><span class="p">,</span> <span class="s1">&#39;alpha&#39;</span><span class="p">]</span>  
   
-  </pre></div>             </td>           </tr>                               <tr id="section-33">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-33">&#182;</a>               </div>               <p>A mahoosive list of recognised colour keyword names as defined at
+  </pre></div>             </td>           </tr>                               <tr id="section-32">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-32">&#182;</a>               </div>               <p>A mahoosive list of recognised colour keyword names as defined at
 <a href="http://www.w3.org/TR/SVG/types.html#ColorKeywords">http://www.w3.org/TR/SVG/types.html#ColorKeywords</a></p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">colourNames = </span>
     <span class="nv">aliceblue: </span>           <span class="s1">&#39;#F0F8FF&#39;</span>
     <span class="nv">antiquewhite: </span>        <span class="s1">&#39;#FAEBD7&#39;</span>
@@ -500,9 +504,9 @@ red.mixWith('#ffffff', 75).rgb();   # -&gt; 'rgb(255, 191, 191)'
     <span class="nv">yellow: </span>              <span class="s1">&#39;#FFFF00&#39;</span>
     <span class="nv">yellowgreen: </span>         <span class="s1">&#39;#9ACD32&#39;</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-34">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-34">&#182;</a>               </div>               <h3>Private helper methods</h3>
+  </pre></div>             </td>           </tr>                               <tr id="section-33">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-33">&#182;</a>               </div>               <h3>Private helper methods</h3>
 
-<p>The following methods are all used internally and are not accessible from outside the jColour object.</p>             </td>             <td class="code">               <div class="highlight"><pre>  </pre></div>             </td>           </tr>                               <tr id="section-35">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-35">&#182;</a>               </div>               <h4><code>rgbToHsl(c)</code></h4>
+<p>The following methods are all used internally and are not accessible from outside the jColour object.</p>             </td>             <td class="code">               <div class="highlight"><pre>  </pre></div>             </td>           </tr>                               <tr id="section-34">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-34">&#182;</a>               </div>               <h4><code>rgbToHsl(c)</code></h4>
 
 <p>Converts the RGB representation to a HSL representation.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">rgbToHsl = </span><span class="nf">(c) -&gt;</span>
     <span class="nv">c.red   = </span><span class="nx">minMax</span> <span class="nx">c</span><span class="p">.</span><span class="nx">red</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span>
@@ -532,7 +536,7 @@ red.mixWith('#ffffff', 75).rgb();   # -&gt; 'rgb(255, 191, 191)'
     <span class="nv">c.lightness   = </span><span class="nx">l</span> <span class="o">*</span> <span class="mi">100</span>
     <span class="nx">c</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-36">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-36">&#182;</a>               </div>               <h4><code>hslToRgb(c)</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-35">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-35">&#182;</a>               </div>               <h4><code>hslToRgb(c)</code></h4>
 
 <p>Converts the HSL representation to a RGB representation.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">hslToRgb = </span><span class="nf">(c) -&gt;</span>
     <span class="nx">c</span><span class="p">.</span><span class="nx">hue</span> <span class="o">-=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">hue</span><span class="err">/360)*360 if c.hue &gt;= 360</span>
@@ -553,7 +557,7 @@ red.mixWith('#ffffff', 75).rgb();   # -&gt; 'rgb(255, 191, 191)'
     <span class="nv">c.blue  = </span><span class="nx">b</span> <span class="o">*</span> <span class="mi">255</span>
     <span class="nx">c</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-37">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-37">&#182;</a>               </div>               <h4><code>hueToRgb(p, q, t)</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-36">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-36">&#182;</a>               </div>               <h4><code>hueToRgb(p, q, t)</code></h4>
 
 <p>Algorithm for converting hue to each of the red, green and blue properties.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">hueToRgb = </span><span class="nf">(m1, m2, h) -&gt;</span>
     <span class="nx">h</span> <span class="o">+=</span> <span class="mi">1</span> <span class="k">if</span> <span class="nx">h</span> <span class="o">&lt;</span> <span class="mi">0</span>
@@ -563,7 +567,7 @@ red.mixWith('#ffffff', 75).rgb();   # -&gt; 'rgb(255, 191, 191)'
     <span class="k">return</span> <span class="nx">m1</span> <span class="o">+</span> <span class="p">(</span><span class="nx">m2</span> <span class="o">-</span> <span class="nx">m1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span><span class="o">/</span><span class="mi">3</span> <span class="o">-</span> <span class="nx">h</span><span class="p">)</span> <span class="o">*</span> <span class="mi">6</span> <span class="k">if</span> <span class="nx">h</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">&lt;</span> <span class="mi">2</span>
     <span class="nx">m1</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-38">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-38">&#182;</a>               </div>               <h4><code>hexify(n = '00')</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-37">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-37">&#182;</a>               </div>               <h4><code>hexify(n = '00')</code></h4>
 
 <p>Algorithm for converting each of the RGB colour channels to it's hex value.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">hexify = </span><span class="nf">(n = &#39;00&#39;) -&gt;</span>
     <span class="nv">n = </span><span class="nb">parseInt</span> <span class="nx">n</span>
@@ -571,12 +575,12 @@ red.mixWith('#ffffff', 75).rgb();   # -&gt; 'rgb(255, 191, 191)'
     <span class="nv">n = </span><span class="nb">Math</span><span class="p">.</span><span class="nx">round</span> <span class="nx">minMax</span><span class="p">(</span><span class="nx">n</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
     <span class="s2">&quot;0123456789ABCDEF&quot;</span><span class="p">.</span><span class="nx">charAt</span><span class="p">((</span><span class="nx">n</span><span class="o">-</span><span class="nx">n</span><span class="o">%</span><span class="mi">16</span><span class="p">)</span><span class="o">/</span><span class="mi">16</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;0123456789ABCDEF&quot;</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="nx">n</span><span class="o">%</span><span class="mi">16</span><span class="p">)</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-39">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-39">&#182;</a>               </div>               <h4><code>minMax(i, min, max)</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-38">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-38">&#182;</a>               </div>               <h4><code>minMax(i, min, max)</code></h4>
 
 <p>Helper method to clip a provided number between a minimum and maximum value.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">minMax = </span><span class="nf">(i, min, max) -&gt;</span>
     <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">min</span><span class="p">),</span> <span class="nx">max</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-40">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-40">&#182;</a>               </div>               <h4><code>throwIfIncompatible(params)</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-39">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-39">&#182;</a>               </div>               <h4><code>throwIfIncompatible(params)</code></h4>
 
 <p>Throws an error if incompatible colour properties are provided.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">throwIfIncompatible = </span><span class="nf">(params) -&gt;</span>
     <span class="nv">rgb = hsl = </span><span class="kc">false</span>
@@ -585,7 +589,8 @@ red.mixWith('#ffffff', 75).rgb();   # -&gt; 'rgb(255, 191, 191)'
       <span class="nv">hsl = </span><span class="kc">true</span> <span class="k">if</span> <span class="nx">key</span> <span class="k">in</span> <span class="p">[</span><span class="s1">&#39;hue&#39;</span><span class="p">,</span> <span class="s1">&#39;saturation&#39;</span><span class="p">,</span> <span class="s1">&#39;luminosity&#39;</span><span class="p">]</span>
     <span class="k">if</span> <span class="nx">rgb</span> <span class="o">and</span> <span class="nx">hsl</span>
       <span class="k">throw</span> <span class="s1">&#39;Cannot change both RGB and HSL properties.&#39;</span>
-    <span class="p">[</span><span class="nx">rgb</span><span class="p">,</span> <span class="nx">hsl</span><span class="p">]</span></pre></div>             </td>           </tr>                               <tr id="section-41">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-41">&#182;</a>               </div>               <h3>Copyright</h3>
+    <span class="p">[</span><span class="nx">rgb</span><span class="p">,</span> <span class="nx">hsl</span><span class="p">]</span>
+  </pre></div>             </td>           </tr>                               <tr id="section-40">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-40">&#182;</a>               </div>               <p>Export jColour or attach to the window object</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nv">root = </span><span class="nx">exports</span> <span class="o">?</span> <span class="nb">window</span><span class="p">.</span><span class="nv">jColour = </span><span class="nx">jColour</span></pre></div>             </td>           </tr>                               <tr id="section-41">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-41">&#182;</a>               </div>               <h3>Copyright</h3>
 
 <p>Copyright (c) 2010-2011 <a href="http://aaronrussell.co.uk">Aaron Russell</a>.
 Licensed under the <a href="http://www.opensource.org/licenses/mit-license.php">MIT license</a>.</p>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
