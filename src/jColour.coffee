@@ -8,6 +8,11 @@
 # the [source code for jColour](http://github.com/aaronrussell/jcolour) is available on Github and
 # is released under the [MIT license](http://www.opensource.org/licenses/mit-license.php).
 
+#### Download jColour
+
+# * [Download the minified version](https://raw.github.com/aaronrussell/jcolour/master/build/jColour.min.js) (8kb)
+# * [Download the fatter version](https://raw.github.com/aaronrussell/jcolour/master/build/jColour.js) (14kb)
+
 #### Creating a jColour object
 
 class jColour
