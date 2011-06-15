@@ -193,14 +193,15 @@ adjustment (decrease) to the current saturation.</p>
     <span class="nx">@saturation</span> <span class="o">-=</span> <span class="p">(</span><span class="nx">@saturation</span> <span class="err">/ 100) * percent</span>
     <span class="nx">hslToRgb</span> <span class="k">this</span>
   
-  </pre></div>             </td>           </tr>                               <tr id="section-23">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-23">&#182;</a>               </div>               <h4><code>grayscale()</code></h4>
+  </pre></div>             </td>           </tr>                               <tr id="section-23">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-23">&#182;</a>               </div>               <h4><code>greyscale()</code></h4>
 
-<p>Converts the color to grayscale. This is identical to <code>desaturate(100)</code>.</p>
+<p>Converts the color to greyscale. This is identical to <code>desaturate(100)</code>. Can also use the alias, <code>grayscale()</code>.</p>
 
-<pre><code>c.grayscale();
-</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">grayscale: </span><span class="o">-&gt;</span>
+<pre><code>c.greyscale();
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">greyscale: </span><span class="o">-&gt;</span>
     <span class="vi">@saturation = </span><span class="mi">0</span>
     <span class="nx">hslToRgb</span> <span class="k">this</span>
+  <span class="nv">grayscale: </span><span class="o">-&gt;</span> <span class="nx">@greyscale</span><span class="p">()</span>
   
   </pre></div>             </td>           </tr>                               <tr id="section-24">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-24">&#182;</a>               </div>               <h4><code>adjustHue(degrees)</code></h4>
 
