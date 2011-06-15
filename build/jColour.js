@@ -109,9 +109,12 @@
       this.saturation -= (this.saturation / 100) * percent;
       return hslToRgb(this);
     };
-    jColour.prototype.grayscale = function() {
+    jColour.prototype.greyscale = function() {
       this.saturation = 0;
       return hslToRgb(this);
+    };
+    jColour.prototype.grayscale = function() {
+      return this.greyscale();
     };
     jColour.prototype.adjustHue = function(degrees) {
       this.hue += degrees;

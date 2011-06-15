@@ -236,15 +236,16 @@ class root.jColour
     hslToRgb this
   
   
-  ##### `grayscale()`
+  ##### `greyscale()`
   #
-  # Converts the color to grayscale. This is identical to `desaturate(100)`.
+  # Converts the color to greyscale. This is identical to `desaturate(100)`. Can also use the alias, `grayscale()`.
   #
-  #     c.grayscale();
+  #     c.greyscale();
   #
-  grayscale: ->
+  greyscale: ->
     @saturation = 0
     hslToRgb this
+  grayscale: -> @greyscale()
   
   
   ##### `adjustHue(degrees)`
