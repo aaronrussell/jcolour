@@ -15,27 +15,34 @@
 
 #### Creating a jColour object
 
-class jColour
+root = exports ? this
+
+class root.jColour
   
   # Create a new jColour object by passing a colour string. jColour will parse a string in any of
   # the following formats: [recognised colour name](http://www.w3.org/TR/SVG/types.html#ColorKeywords),
   # hexidecimal, rgb/a, hsl/a. For example, all the following statements work:
   #
   #     c = new jColour('red');
-  #     c = new jColour('lightyellow');
+  #     c = new jColour('#f00');
   #     c = new jColour('#ff0000');
   #     c = new jColour('rgb(255,0,0)');
   #     c = new jColour('rgba(255,0,0,1)');
   #     c = new jColour('hsl(0,100,100)');
   #     c = new jColour('hsla(0,100,100,1)');
   #
-  # Internally, colours are represented in both RGBA and HSLA. Any colour adjustments result in
+  # Internally, colours are represented in both RGB and HSL. Any colour adjustments result in
   # both representaions being recalculated. The alpha channel of a colour is stored independent
   # it's RGB or HSL representation. If no alpha value is supplied, it defaults to 1.
   #
   constructor: (col = '#ffffff') ->
     
     col = colourNames[col] if col.toLowerCase() of colourNames
+    if hex = col.match /^#?([a-f0-9]{3})$/i
+      h1 = hex[1].substring(0,1)
+      h2 = hex[1].substring(1,2)
+      h3 = hex[1].substring(2,3)
+      col = "##{h1+h1+h2+h2+h3+h3}"
     
     if hex = col.match /^#?([a-f0-9]{6,8})$/i
       @red    = parseInt hex[1].substring(0,2), 16
@@ -88,9 +95,9 @@ class jColour
   #
   rgb: ->
     if @alpha == 1
-      return "rgb(#{Math.round @red}, #{Math.round @green}, #{Math.round @blue})"
+      "rgb(#{Math.round @red}, #{Math.round @green}, #{Math.round @blue})"
     else
-      return "rgba(#{Math.round @red}, #{Math.round @green}, #{Math.round @blue}, #{Math.round(@alpha * 100) / 100})"
+      "rgba(#{Math.round @red}, #{Math.round @green}, #{Math.round @blue}, #{Math.round(@alpha * 100) / 100})"
   
   
   ##### `hsl()`
@@ -102,9 +109,9 @@ class jColour
   #
   hsl: ->
     if @alpha == 1
-      return "hsl(#{Math.round @hue}, #{Math.round @saturation}, #{Math.round @lightness})"
+      "hsl(#{Math.round @hue}, #{Math.round @saturation}, #{Math.round @lightness})"
     else
-      return "hsla(#{Math.round @hue}, #{Math.round @saturation}, #{Math.round @lightness}, #{Math.round(@alpha * 100) / 100})"
+      "hsla(#{Math.round @hue}, #{Math.round @saturation}, #{Math.round @lightness}, #{Math.round(@alpha * 100) / 100})"
   
   
   ##### `toS()`
@@ -682,11 +689,7 @@ class jColour
     if rgb and hsl
       throw 'Cannot change both RGB and HSL properties.'
     [rgb, hsl]
-  
 
-# Export jColour or attach to the window object
-#  
-root = exports ? window.jColour = jColour
 
 
 #### Copyright

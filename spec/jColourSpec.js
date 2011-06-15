@@ -7,25 +7,30 @@ describe('Creating a jColour object', function(){
     expect(c.hex()).toEqual('#6495ed')
   });
   
-  it('should recognise a hex string', function(){
+  it('should recognise a 3 character hex string', function(){
+    c1 = new jColour('#f00');
+    expect(c1.toS()).toEqual('red');
+  });
+  
+  it('should recognise a 6 and 8 character hex string', function(){
     c1 = new jColour('#ff0000');
     c2 = new jColour('#ff000077');
-    expect(c1).toBeDefined();
-    expect(c2).toBeDefined();
+    expect(c1.toS()).toEqual('red');
+    expect(c2.toS()).toEqual('red');
   });
   
   it('should recognise a rgb string', function(){
     c1 = new jColour('rgb(255, 0, 0)');
     c2 = new jColour('rgba( 255 , 0 , 0 , 0.5)');
-    expect(c1).toBeDefined();
-    expect(c2).toBeDefined();
+    expect(c1.toS()).toEqual('red');
+    expect(c2.toS()).toEqual('red');
   });
   
   it('should recognise a hsl string', function(){
     c1 = new jColour('hsl(0, 100, 50)');
     c2 = new jColour('hsla( 0 , 100 , 50 , 0.5)');
-    expect(c1).toBeDefined();
-    expect(c2).toBeDefined();
+    expect(c1.toS()).toEqual('red');
+    expect(c2.toS()).toEqual('red');
   });
   
   it('should default to white colour if no string passed', function(){

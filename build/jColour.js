@@ -1,20 +1,27 @@
 (function() {
-  var jColour, root;
+  var root;
   var __indexOf = Array.prototype.indexOf || function(item) {
     for (var i = 0, l = this.length; i < l; i++) {
       if (this[i] === item) return i;
     }
     return -1;
   };
-  jColour = (function() {
+  root = typeof exports !== "undefined" && exports !== null ? exports : this;
+  root.jColour = (function() {
     var colourNames, hexify, hslToRgb, hueToRgb, minMax, properties, rgbToHsl, throwIfIncompatible;
     function jColour(col) {
-      var hex, hsl, rgb;
+      var h1, h2, h3, hex, hsl, rgb;
       if (col == null) {
         col = '#ffffff';
       }
       if (col.toLowerCase() in colourNames) {
         col = colourNames[col];
+      }
+      if (hex = col.match(/^#?([a-f0-9]{3})$/i)) {
+        h1 = hex[1].substring(0, 1);
+        h2 = hex[1].substring(1, 2);
+        h3 = hex[1].substring(2, 3);
+        col = "#" + (h1 + h1 + h2 + h2 + h3 + h3);
       }
       if (hex = col.match(/^#?([a-f0-9]{6,8})$/i)) {
         this.red = parseInt(hex[1].substring(0, 2), 16);
@@ -458,5 +465,4 @@
     };
     return jColour;
   })();
-  root = typeof exports !== "undefined" && exports !== null ? exports : window.jColour = jColour;
 }).call(this);

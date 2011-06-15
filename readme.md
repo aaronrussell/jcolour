@@ -15,7 +15,7 @@ jColour is written by [Aaron Russell](http://aaronrussell.co.uk), and is release
 
 jColour is documented using the excellent [Docco](http://jashkenas.github.com/docco/). For details of the methods available, and how everything works, [refer to the jColour documentation](http://aaronrussell.github.com/jcolour/).
 
-In theory, jColour should work equally well in both the browser and in CommonJS, although the latter hasn't been tested yet.
+jColour should work equally well in both the browser and in CommonJS.
 
 ### Copyright
 
