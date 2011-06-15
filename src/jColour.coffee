@@ -15,6 +15,8 @@
 
 #### Creating a jColour object
 
+# The jColour class can be used in the browser or in your CommonJS projects.
+#
 root = exports ? this
 
 class root.jColour
