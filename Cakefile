@@ -11,6 +11,6 @@ task 'minify', 'Minify the compiled JavaScript using Google Closure', ->
     console.log stdout + stderr
 
 task 'docs', 'Compile project documentation', ->
-  exec 'docco src/*.coffee', (err, stdout, stderr) ->
+  exec 'docco src/*.coffee && mv docs/jColour.html docs/index.html', (err, stdout, stderr) ->
     throw err if err
     console.log stdout + stderr
