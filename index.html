@@ -9,13 +9,15 @@ the <a href="http://github.com/aaronrussell/jcolour">source code for jColour</a>
 is released under the <a href="http://www.opensource.org/licenses/mit-license.php">MIT license</a>.</p>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <h3>Download jColour</h3>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <ul>
 <li><a href="https://raw.github.com/aaronrussell/jcolour/master/build/jColour.min.js">Download the minified version</a> (8kb)</li>
 <li><a href="https://raw.github.com/aaronrussell/jcolour/master/build/jColour.js">Download the fatter version</a> (14kb)</li>
-</ul>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <h3>Creating a jColour object</h3>             </td>             <td class="code">               <div class="highlight"><pre><span class="k">class</span> <span class="nx">jColour</span>
+</ul>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <h3>Creating a jColour object</h3>             </td>             <td class="code">               <div class="highlight"><pre><span class="nv">root = </span><span class="nx">exports</span> <span class="o">?</span> <span class="k">this</span>
+
+<span class="k">class</span> <span class="nx">root</span><span class="p">.</span><span class="nx">jColour</span>
   </pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <p>Create a new jColour object by passing a colour string. jColour will parse a string in any of
 the following formats: <a href="http://www.w3.org/TR/SVG/types.html#ColorKeywords">recognised colour name</a>,
 hexidecimal, rgb/a, hsl/a. For example, all the following statements work:</p>
 
 <pre><code>c = new jColour('red');
-c = new jColour('lightyellow');
+c = new jColour('#f00');
 c = new jColour('#ff0000');
 c = new jColour('rgb(255,0,0)');
 c = new jColour('rgba(255,0,0,1)');
@@ -23,11 +25,16 @@ c = new jColour('hsl(0,100,100)');
 c = new jColour('hsla(0,100,100,1)');
 </code></pre>
 
-<p>Internally, colours are represented in both RGBA and HSLA. Any colour adjustments result in
+<p>Internally, colours are represented in both RGB and HSL. Any colour adjustments result in
 both representaions being recalculated. The alpha channel of a colour is stored independent
 it's RGB or HSL representation. If no alpha value is supplied, it defaults to 1.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">constructor: </span><span class="nf">(col = &#39;#ffffff&#39;) -&gt;</span>
     
     <span class="nv">col = </span><span class="nx">colourNames</span><span class="p">[</span><span class="nx">col</span><span class="p">]</span> <span class="k">if</span> <span class="nx">col</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()</span> <span class="k">of</span> <span class="nx">colourNames</span>
+    <span class="k">if</span> <span class="nv">hex = </span><span class="nx">col</span><span class="p">.</span><span class="nx">match</span> <span class="sr">/^#?([a-f0-9]{3})$/i</span>
+      <span class="nv">h1 = </span><span class="nx">hex</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">substring</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+      <span class="nv">h2 = </span><span class="nx">hex</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">substring</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+      <span class="nv">h3 = </span><span class="nx">hex</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">substring</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+      <span class="nv">col = </span><span class="s2">&quot;##{h1+h1+h2+h2+h3+h3}&quot;</span>
     
     <span class="k">if</span> <span class="nv">hex = </span><span class="nx">col</span><span class="p">.</span><span class="nx">match</span> <span class="sr">/^#?([a-f0-9]{6,8})$/i</span>
       <span class="vi">@red    = </span><span class="nb">parseInt</span> <span class="nx">hex</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">substring</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="mi">16</span>
@@ -72,9 +79,9 @@ the returned representation will be RGBA.</p>
 <pre><code>c.rgb();  # -&gt; 'rgb(255,0,0)'
 </code></pre>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">rgb: </span><span class="o">-&gt;</span>
     <span class="k">if</span> <span class="nx">@alpha</span> <span class="o">==</span> <span class="mi">1</span>
-      <span class="k">return</span> <span class="s2">&quot;rgb(#{Math.round @red}, #{Math.round @green}, #{Math.round @blue})&quot;</span>
+      <span class="s2">&quot;rgb(#{Math.round @red}, #{Math.round @green}, #{Math.round @blue})&quot;</span>
     <span class="k">else</span>
-      <span class="k">return</span> <span class="s2">&quot;rgba(#{Math.round @red}, #{Math.round @green}, #{Math.round @blue}, #{Math.round(@alpha * 100) / 100})&quot;</span>
+      <span class="s2">&quot;rgba(#{Math.round @red}, #{Math.round @green}, #{Math.round @blue}, #{Math.round(@alpha * 100) / 100})&quot;</span>
   
   </pre></div>             </td>           </tr>                               <tr id="section-10">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-10">&#182;</a>               </div>               <h4><code>hsl()</code></h4>
 
@@ -84,9 +91,9 @@ the returned representation will be HSLA.</p>
 <pre><code>c.hsl();  # -&gt; 'hsl(0,100,100)'
 </code></pre>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">hsl: </span><span class="o">-&gt;</span>
     <span class="k">if</span> <span class="nx">@alpha</span> <span class="o">==</span> <span class="mi">1</span>
-      <span class="k">return</span> <span class="s2">&quot;hsl(#{Math.round @hue}, #{Math.round @saturation}, #{Math.round @lightness})&quot;</span>
+      <span class="s2">&quot;hsl(#{Math.round @hue}, #{Math.round @saturation}, #{Math.round @lightness})&quot;</span>
     <span class="k">else</span>
-      <span class="k">return</span> <span class="s2">&quot;hsla(#{Math.round @hue}, #{Math.round @saturation}, #{Math.round @lightness}, #{Math.round(@alpha * 100) / 100})&quot;</span>
+      <span class="s2">&quot;hsla(#{Math.round @hue}, #{Math.round @saturation}, #{Math.round @lightness}, #{Math.round(@alpha * 100) / 100})&quot;</span>
   
   </pre></div>             </td>           </tr>                               <tr id="section-11">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-11">&#182;</a>               </div>               <h4><code>toS()</code></h4>
 
@@ -592,8 +599,7 @@ red.mixWith('#ffffff', 75).rgb();   # -&gt; 'rgb(255, 191, 191)'
       <span class="nv">hsl = </span><span class="kc">true</span> <span class="k">if</span> <span class="nx">key</span> <span class="k">in</span> <span class="p">[</span><span class="s1">&#39;hue&#39;</span><span class="p">,</span> <span class="s1">&#39;saturation&#39;</span><span class="p">,</span> <span class="s1">&#39;luminosity&#39;</span><span class="p">]</span>
     <span class="k">if</span> <span class="nx">rgb</span> <span class="o">and</span> <span class="nx">hsl</span>
       <span class="k">throw</span> <span class="s1">&#39;Cannot change both RGB and HSL properties.&#39;</span>
-    <span class="p">[</span><span class="nx">rgb</span><span class="p">,</span> <span class="nx">hsl</span><span class="p">]</span>
-  </pre></div>             </td>           </tr>                               <tr id="section-42">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-42">&#182;</a>               </div>               <p>Export jColour or attach to the window object</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nv">root = </span><span class="nx">exports</span> <span class="o">?</span> <span class="nb">window</span><span class="p">.</span><span class="nv">jColour = </span><span class="nx">jColour</span></pre></div>             </td>           </tr>                               <tr id="section-43">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-43">&#182;</a>               </div>               <h3>Copyright</h3>
+    <span class="p">[</span><span class="nx">rgb</span><span class="p">,</span> <span class="nx">hsl</span><span class="p">]</span></pre></div>             </td>           </tr>                               <tr id="section-42">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-42">&#182;</a>               </div>               <h3>Copyright</h3>
 
 <p>Copyright (c) 2010-2011 <a href="http://aaronrussell.co.uk">Aaron Russell</a>.
 Licensed under the <a href="http://www.opensource.org/licenses/mit-license.php">MIT license</a>.</p>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
